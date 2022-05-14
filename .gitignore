@@ -1,0 +1,16 @@
+.DS_Store
+node_modules/
+dist/
+gifs/
+npm-debug.log
+test/unit/coverage
+test/e2e/reports
+selenium-debug.log
+.idea
+.vs
+.vscode
+.vs/slnx.sqlite
+.vs/slnx.sqlite
+dist.zip
+dist.zip
+.vs/
