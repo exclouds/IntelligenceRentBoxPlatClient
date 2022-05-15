@@ -13,9 +13,9 @@ module.exports = {
         assetsPublicPath: '/',
         proxyTable: {
           // '/DBService': {
-          //   target: 'http://222.173.95.170:18088/exclouds',
+          //   target: 'http://47.103.117.243',
           //   pathRewrite: {
-          //     '^/DBService': ''
+          //     '^/DBService': '/DBService'
           //   }
           // }
            '/DBService': {

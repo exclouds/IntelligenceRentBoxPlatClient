@@ -1,8 +1,8 @@
 <template>
-  <div class="app-container">
+  <div class="app-container xdqueryclass">
     <el-form size="mini" label-width="100px" @submist.native.prevent class="ctntype">
       <el-row style="margin-bottom:10px;">
-        <el-col :span="5">
+        <el-col :span="4">
           <el-form-item label="单号：" prop>
            <el-input placeholder="单号"    style="width:100%;" 
               v-model="search.BillNO"  size="mini" clearable 
@@ -15,7 +15,7 @@
             <el-select
               v-model="search.StartStation"
               placeholder="起运站"
-              style="width:100%"
+              style="width:99%"
               clearable
               filterable
             >
@@ -33,7 +33,25 @@
             <el-select
               v-model="search.EndStation"
               placeholder="目的站"
-              style="width:100%"
+              style="width:99%"
+            clearable
+              filterable
+            >
+               <el-option
+                v-for="item in siteList"
+                :key="item.value"
+                :label="item.displayText"
+                :value="item.value"
+              ></el-option>
+            </el-select>
+          </el-form-item>
+        </el-col>
+        <el-col :span="4">
+          <el-form-item label="还箱地：" prop>
+            <el-select
+              v-model="search.ReturnStation"
+              placeholder="目的站"
+              style="width:99%"
             clearable
               filterable
             >
@@ -47,55 +65,51 @@
           </el-form-item>
         </el-col>
         
-        <el-col :span="4">
-            <el-form-item label="是否启用：" >
+         <el-col :span="4">
+            <el-form-item label="是否库存：" >
              <el-select
-              v-model="search.IsEnable"
-              placeholder="是否启用"
+              v-model="search.IsInStock"
+              placeholder="是否库存"
               clearable
-              filterable  
-               style="width:100%"        
+              filterable          
             >
               <el-option label="是" :value="true"></el-option>
               <el-option label="否" :value="false"></el-option>
             </el-select>
             </el-form-item>
           </el-col>
+          </el-row>
+          <el-row>
+           <el-col :span="4">
+            <el-form-item label="租金范围起：" >
+               <el-input-number
+                    placeholder="租金起"
+                    v-model="search.startprice"
+                    controls-position="right"                                                            
+                    :step="1"
+                    clearable
+                    style="width: 100%"
+                    ></el-input-number>
+            </el-form-item>
+          </el-col>
+      
           <el-col :span="4">
-            <el-form-item label="是否审核：" >
-             <el-select
-              v-model="search.IsVerify"
-              placeholder="是否审核"
-              clearable
-              filterable    
-               style="width:100%"      
-            >
-              <el-option label="是" :value="true"></el-option>
-              <el-option label="否" :value="false"></el-option>
-            </el-select>
+            <el-form-item label="租金范围止：" >
+               <el-input-number
+                    placeholder="租金止"
+                    v-model="search.endprice"
+                    controls-position="right"                                                            
+                    :step="1"
+                    clearable
+                    style="width: 100%"
+                    ></el-input-number>
             </el-form-item>
           </el-col>
-          <el-col :span="4">
-            <el-form-item label="是否完成：" >
-             <el-select
-              v-model="search.Finish"
-              placeholder="是否完成"
-              clearable
-              filterable       
-               style="width:100%"   
-            >
-              <el-option label="是" :value="true"></el-option>
-              <el-option label="否" :value="false"></el-option>
-            </el-select>
-            </el-form-item>
-          </el-col>
-        <el-col :span="10">
+      
+        
+        <el-col :span="1">
           <el-form-item label prop label-width="15px">
             <el-button type="primary" size="mini" @click="onSearchBefore();getTableList()">搜索</el-button>
-            <el-button type="primary" size="mini" @click="createOrEdit()">新增</el-button>
-            <el-button type="primary" size="mini" @click="onBatchDelete()">批量删除</el-button>
-             <el-button type="primary" size="mini" @click="BatchOPEN(true)" :loading="btnloading">批量启用</el-button>
-             <el-button type="primary" size="mini" @click="BatchOPEN(false)" :loading="btnloading">批量停用</el-button>
           </el-form-item>
         </el-col>
       </el-row>
@@ -117,7 +131,7 @@
         @sort-change="sortChange"
         @select="handleSelectionChange"
       >
-        <el-table-column :reserve-selection="true" type="selection" width="40"></el-table-column>
+  
         <el-table-column type="index" align="center" label="序号" width="50" fixed="left">
           <template slot-scope="scope">{{countIndex(scope.$index)}}</template>
         </el-table-column>
@@ -146,6 +160,14 @@
           sortable="custom"
           show-overflow-tooltip
         ></el-table-column>
+        <el-table-column
+          align="center"
+          prop="returnStation"
+          label="还箱地"
+          width="120px"
+          sortable="custom"
+          show-overflow-tooltip
+        ></el-table-column>
          <el-table-column
           align="center"
           prop="line"
@@ -154,7 +176,40 @@
           sortable="custom"
           show-overflow-tooltip
         ></el-table-column>
+         <el-table-column
+          align="center"
+          prop="xxcc"
+          label="箱型尺寸"
+          width="120px"
+          sortable="custom"
+          show-overflow-tooltip
+        ></el-table-column>
         
+         <el-table-column
+          align="center"
+          prop="isInStock"
+          label="是否库存"
+           width="100px"
+          sortable="custom"
+          show-overflow-tooltip
+        >
+          <template slot-scope="scope">
+            <span>{{scope.row.isInStock?"是":"否"}}</span>
+           </template>
+        </el-table-column>
+        
+         <el-table-column
+          align="center"
+          prop="predictTime"
+          label="预计到站时间"
+          width="120px"
+          sortable="custom"
+          show-overflow-tooltip
+        >
+            <template slot-scope="scope">{{
+              scope.row.predictTime | parseTime('{y}-{m}-{d}')
+            }}</template>
+        </el-table-column>
         <el-table-column
           align="center"
           prop="effectiveSTime"
@@ -181,19 +236,9 @@
         </el-table-column>
            <el-table-column
           align="center"
-          prop="hopePrice"
-          label="期望成交价"
+          prop="sellingPrice"
+          label="租金"
            width="120px"
-          sortable="custom"
-          show-overflow-tooltip
-        ></el-table-column>
-         
-
-        <el-table-column
-          align="center"
-          prop="inquiryNum"
-          label="询价次数"
-          width="100px"
           sortable="custom"
           show-overflow-tooltip
         ></el-table-column>
@@ -211,48 +256,7 @@
            </template>
         </el-table-column>
 
-        <el-table-column
-          align="center"
-          prop="isEnable"
-          label="是否启用"
-          width="100px"
-          sortable="custom"
-          show-overflow-tooltip
-        >
-           <template slot-scope="scope">
-                    <span>{{scope.row.isEnable?"是":"否"}}</span>
-          </template>
-        </el-table-column>
-        <el-table-column
-          align="center"
-          prop="isVerify"
-          label="是否审核"
-           width="100px"
-          sortable="custom"
-          show-overflow-tooltip
-        >
-           <template slot-scope="scope">
-              <span>{{scope.row.isVerify?"是":"否"}}</span>
-            </template>
-        </el-table-column>
-
-       <el-table-column
-          align="center"
-          prop="verifyRem"
-          label="审核评语"
-          width="120px"
-          sortable="custom"
-          show-overflow-tooltip
-        ></el-table-column>
-        
-        <el-table-column
-          align="center"
-          prop="remarks"
-          label="备注"
-           width="120px"
-          sortable="custom"
-          show-overflow-tooltip
-        ></el-table-column>
+       
         <el-table-column
           align="center"
           prop="creationTime"
@@ -261,19 +265,13 @@
           sortable="custom"
            show-overflow-tooltip
         >
-          <template slot-scope="scope">{{scope.row.creationTime|parseTime()}}</template>
-        </el-table-column>
-        <el-table-column align="center" label="操作" width="150px" fixed="right">
           <template slot-scope="scope">
-              <div class="tableBtn" @click="OPENSINGE(!scope.row.isEnable,scope.row.id)"
-               v-if=" scope.row.finish  !==true">
-               {{scope.row.isEnable?"停用":"启用"}} 
-                </div>
-            <div class="tableBtn" @click="createOrEdit(scope.row.id)"
-            v-if="scope.row.isVerify  !==true && scope.row.finish  !==true">编辑</div>
-            <div class="tableBtn" @click="deletecdelinfo(scope.row.id)"
-             v-if="scope.row.isVerify  !==true && scope.row.finish  !==true">删除</div>
-            
+            {{scope.row.creationTime|parseTime('{y}-{m}-{d}')}}
+            </template>
+        </el-table-column>   
+        <el-table-column align="center" label="操作" width="100px" fixed="right">
+          <template slot-scope="scope">
+              <div class="tableBtn" @click="createOrEdit(scope.row.id)" >查看箱信息</div>
           </template>
         </el-table-column>
       </el-table>
@@ -288,50 +286,42 @@
         layout="total, sizes, prev, pager, next, jumper"
       ></el-pagination>
     </el-row>
-    <creat-ZKDelInfo
-      ref="creatZKDelInfoComp"
-      :pshow="creatZKDelInfoComp.show"
+     <ShowXDDelInfo
+      ref="creatXDDelInfoComp"
+      :pshow="creatXDDelInfoComp.show"
       @on-show-change="onCreatCtnTypeContrastCompShowChange"
       @on-save-success="onSaveSuccess"
-    ></creat-ZKDelInfo>
-
+    ></ShowXDDelInfo>
   </div>
 </template>
 <script>
 import { tableMixin } from "mixin/commTable";
 import { warnMsg } from "utils/messageBox";
-import creatZKDelInfo from "./creatZKDelInfo";
-import {
-  GetZKDelInfoList,
-  BatchDelete,BatchOP
-} from "api/InformationDelivery/ZK";
+import {GetXDDelInfoList} from "api/OnlineSearch";
 import { GetSiteList,GetLineList } from "api/publicBase/Combox";
-
+import ShowXDDelInfo from './ShowXDDelInfo'
 
 
 export default {
-  name: "ZKDelInfoIndex",
+  name: "XDSeachInfoIndex",
   mixins: [tableMixin],
-  components: {
-    creatZKDelInfo
-  },
+  components: {ShowXDDelInfo},
   data() {
     return {
-      creatZKDelInfoComp: {
-        show: false
-      },
-    
       search: {
         BillNO: "",
         StartStation: "",
         EndStation: "",
-        IsEnable: undefined,
-        IsVerify: undefined,
-        Finish: undefined,
+        ReturnStation: "",    
+        IsInStock: undefined,
+        startprice: "", 
+        endprice: "", 
       },
       siteList: [], //站点
       lineList: [],//
-      btnloading:false
+      creatXDDelInfoComp: {
+        show: false
+      },
     
     };
   },
@@ -363,8 +353,8 @@ export default {
 
       this.tableData = [];
       this.table.loading = true;
-      this.$refs.table.clearSelection();
-      GetZKDelInfoList(data)
+
+      GetXDDelInfoList(data)
         .then(res => {
           this.table.loading = false;
           if (res.success) {
@@ -378,100 +368,16 @@ export default {
         .catch(err => {
           this.table.loading = false;
         });
-    },
- 
-    //打开添加或修改
+    },  
+     //打开添加或修改
     createOrEdit(id) {
-      if (id) {
-        this.creatZKDelInfoComp.show = true;
-        this.$refs.creatZKDelInfoComp.getsiteList();
-        this.$refs.creatZKDelInfoComp.GetZKDelInfoSingle(id);
-              
-      } else {
-        this.creatZKDelInfoComp.show = true;
-        this.$refs.creatZKDelInfoComp.getsiteList();     
-      }
+       this.creatXDDelInfoComp.show = true;
+       this.$refs.creatXDDelInfoComp.id=id;
+        this.$refs.creatXDDelInfoComp.getTableList(id);     
     },
     onCreatCtnTypeContrastCompShowChange(val) {
-      this.creatZKDelInfoComp.show = val;
-    },
-    //添加或修改成功事件
-    onSaveSuccess() {
-      this.getTableList();
-    },
-    //批量删除
-    onBatchDelete() {
-      if (this.table.choosedRow.length === 0) {
-        warnMsg("请选择要删除的数据");
-        return;
-      }
-      this.$confirm("是否确定删除", "提示", {
-        confirmButtonText: "确定",
-        cancelButtonText: "取消",
-        type: "warning"
-      }).then(({ value }) => {
-        let arr = this.table.choosedRow.map(item => item.id);
-        BatchDelete(arr).then(res => {
-          this.batchDeleteSearch();
-          this.$refs.table.clearSelection();
-          this.getTableList();
-        });
-      });
-    },
-    //删除
-    deletecdelinfo(id) {
-       this.$confirm("是否确定删除", "提示", {
-        confirmButtonText: "确定",
-        cancelButtonText: "取消",
-        type: "warning"
-      }).then(({ value }) => {
-        BatchDelete([id]).then(res => {
-        this.getTableList();
-        this.batchDeleteSearch();
-        this.$refs.table.clearSelection();
-      });
-      });
-     
-    },
-    BatchOPEN(val)
-    {
-      var msg=val==true?'启用':'停用';
-      if (this.table.choosedRow.length === 0) {
-        warnMsg("请选择要"+msg+"的数据");
-        return;
-      }
-       let arr = this.table.choosedRow.map(item => item.id);
-       this.bathoene(val,msg,arr);
-    },
-    OPENSINGE(val,id)
-    {
-      var msg=val==true?'启用':'停用';    
-       let arr = [];
-       arr.push(id);
-       this.bathoene(val,msg,arr);
-    },
-   bathoene(val,msg,arr) {
-    
-      this.$confirm("是否确定"+msg+"?", "提示", {
-        confirmButtonText: "确定",
-        cancelButtonText: "取消",
-        type: "warning"
-      }).then(({ value }) => {
-        this.btnloading=true;
-        let data={
-          ids:arr,
-          IsEnable:val
-        }
-        BatchOP(data).then(res => {
-          // this.batchDeleteSearch();
-          this.btnloading=false;
-          this.getTableList();
-        })
-        .catch(()=>{
-           this.btnloading=false;
-        });
-      });
-    },
+      this.creatXDDelInfoComp.show = val;
+    },  
     
   },
   //初始化
@@ -484,6 +390,8 @@ export default {
 </script>
 
 <style lang="scss">
+.xdqueryclass{
+//background-color: white;
 .ctntype {
   .item1 {
     .el-form-item__label {
@@ -492,6 +400,7 @@ export default {
     .el-form-item__content {
       margin-left: 68px !important;
     }
+  }
   }
 }
 </style>

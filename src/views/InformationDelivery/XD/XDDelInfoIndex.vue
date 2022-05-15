@@ -15,7 +15,7 @@
             <el-select
               v-model="search.StartStation"
               placeholder="起运站"
-              style="width:100%"
+              style="width:99%"
               clearable
               filterable
             >
@@ -33,7 +33,25 @@
             <el-select
               v-model="search.EndStation"
               placeholder="目的站"
-              style="width:100%"
+              style="width:99%"
+            clearable
+              filterable
+            >
+               <el-option
+                v-for="item in siteList"
+                :key="item.value"
+                :label="item.displayText"
+                :value="item.value"
+              ></el-option>
+            </el-select>
+          </el-form-item>
+        </el-col>
+        <el-col :span="4">
+          <el-form-item label="还箱地：" prop>
+            <el-select
+              v-model="search.ReturnStation"
+              placeholder="目的站"
+              style="width:99%"
             clearable
               filterable
             >
@@ -47,14 +65,26 @@
           </el-form-item>
         </el-col>
         
+         <el-col :span="4">
+            <el-form-item label="是否库存：" >
+             <el-select
+              v-model="search.IsInStock"
+              placeholder="是否库存"
+              clearable
+              filterable          
+            >
+              <el-option label="是" :value="true"></el-option>
+              <el-option label="否" :value="false"></el-option>
+            </el-select>
+            </el-form-item>
+          </el-col>
         <el-col :span="4">
             <el-form-item label="是否启用：" >
              <el-select
               v-model="search.IsEnable"
               placeholder="是否启用"
               clearable
-              filterable  
-               style="width:100%"        
+              filterable          
             >
               <el-option label="是" :value="true"></el-option>
               <el-option label="否" :value="false"></el-option>
@@ -67,8 +97,7 @@
               v-model="search.IsVerify"
               placeholder="是否审核"
               clearable
-              filterable    
-               style="width:100%"      
+              filterable          
             >
               <el-option label="是" :value="true"></el-option>
               <el-option label="否" :value="false"></el-option>
@@ -81,8 +110,7 @@
               v-model="search.Finish"
               placeholder="是否完成"
               clearable
-              filterable       
-               style="width:100%"   
+              filterable          
             >
               <el-option label="是" :value="true"></el-option>
               <el-option label="否" :value="false"></el-option>
@@ -146,6 +174,14 @@
           sortable="custom"
           show-overflow-tooltip
         ></el-table-column>
+        <el-table-column
+          align="center"
+          prop="returnStation"
+          label="还箱地"
+          width="120px"
+          sortable="custom"
+          show-overflow-tooltip
+        ></el-table-column>
          <el-table-column
           align="center"
           prop="line"
@@ -154,7 +190,40 @@
           sortable="custom"
           show-overflow-tooltip
         ></el-table-column>
+         <el-table-column
+          align="center"
+          prop="xxcc"
+          label="箱型尺寸"
+          width="120px"
+          sortable="custom"
+          show-overflow-tooltip
+        ></el-table-column>
         
+         <el-table-column
+          align="center"
+          prop="isInStock"
+          label="是否库存"
+           width="100px"
+          sortable="custom"
+          show-overflow-tooltip
+        >
+          <template slot-scope="scope">
+            <span>{{scope.row.isInStock?"是":"否"}}</span>
+           </template>
+        </el-table-column>
+        
+         <el-table-column
+          align="center"
+          prop="predictTime"
+          label="预计到站时间"
+          width="120px"
+          sortable="custom"
+          show-overflow-tooltip
+        >
+            <template slot-scope="scope">{{
+              scope.row.predictTime | parseTime('{y}-{m}-{d}')
+            }}</template>
+        </el-table-column>
         <el-table-column
           align="center"
           prop="effectiveSTime"
@@ -181,22 +250,15 @@
         </el-table-column>
            <el-table-column
           align="center"
-          prop="hopePrice"
-          label="期望成交价"
+          prop="sellingPrice"
+          label="租金"
            width="120px"
           sortable="custom"
           show-overflow-tooltip
         ></el-table-column>
          
 
-        <el-table-column
-          align="center"
-          prop="inquiryNum"
-          label="询价次数"
-          width="100px"
-          sortable="custom"
-          show-overflow-tooltip
-        ></el-table-column>
+      
 
        <el-table-column
           align="center"
@@ -265,7 +327,7 @@
         </el-table-column>
         <el-table-column align="center" label="操作" width="150px" fixed="right">
           <template slot-scope="scope">
-              <div class="tableBtn" @click="OPENSINGE(!scope.row.isEnable,scope.row.id)"
+             <div class="tableBtn" @click="OPENSINGE(!scope.row.isEnable,scope.row.id)"
                v-if=" scope.row.finish  !==true">
                {{scope.row.isEnable?"停用":"启用"}} 
                 </div>
@@ -288,36 +350,36 @@
         layout="total, sizes, prev, pager, next, jumper"
       ></el-pagination>
     </el-row>
-    <creat-ZKDelInfo
-      ref="creatZKDelInfoComp"
-      :pshow="creatZKDelInfoComp.show"
+    <creat-XDDelInfo
+      ref="creatXDDelInfoComp"
+      :pshow="creatXDDelInfoComp.show"
       @on-show-change="onCreatCtnTypeContrastCompShowChange"
       @on-save-success="onSaveSuccess"
-    ></creat-ZKDelInfo>
+    ></creat-XDDelInfo>
 
   </div>
 </template>
 <script>
 import { tableMixin } from "mixin/commTable";
 import { warnMsg } from "utils/messageBox";
-import creatZKDelInfo from "./creatZKDelInfo";
+import creatXDDelInfo from "./creatXDDelInfo";
 import {
-  GetZKDelInfoList,
+  GetXDDelInfoList,
   BatchDelete,BatchOP
-} from "api/InformationDelivery/ZK";
+} from "api/InformationDelivery/XD";
 import { GetSiteList,GetLineList } from "api/publicBase/Combox";
 
 
 
 export default {
-  name: "ZKDelInfoIndex",
+  name: "XDDelInfoIndex",
   mixins: [tableMixin],
   components: {
-    creatZKDelInfo
+    creatXDDelInfo
   },
   data() {
     return {
-      creatZKDelInfoComp: {
+      creatXDDelInfoComp: {
         show: false
       },
     
@@ -325,9 +387,11 @@ export default {
         BillNO: "",
         StartStation: "",
         EndStation: "",
+        ReturnStation: "",
         IsEnable: undefined,
         IsVerify: undefined,
         Finish: undefined,
+        IsInStock: undefined,
       },
       siteList: [], //站点
       lineList: [],//
@@ -364,7 +428,7 @@ export default {
       this.tableData = [];
       this.table.loading = true;
       this.$refs.table.clearSelection();
-      GetZKDelInfoList(data)
+      GetXDDelInfoList(data)
         .then(res => {
           this.table.loading = false;
           if (res.success) {
@@ -382,18 +446,18 @@ export default {
  
     //打开添加或修改
     createOrEdit(id) {
+       this.creatXDDelInfoComp.show = true;
+       this.$refs.creatXDDelInfoComp.getsiteList();
+       this.$refs.creatXDDelInfoComp.getcclist();
+       this.$refs.creatXDDelInfoComp.getxxlist();
       if (id) {
-        this.creatZKDelInfoComp.show = true;
-        this.$refs.creatZKDelInfoComp.getsiteList();
-        this.$refs.creatZKDelInfoComp.GetZKDelInfoSingle(id);
+       
+        this.$refs.creatXDDelInfoComp.GetXDDelInfoSingle(id);
               
-      } else {
-        this.creatZKDelInfoComp.show = true;
-        this.$refs.creatZKDelInfoComp.getsiteList();     
-      }
+      } 
     },
     onCreatCtnTypeContrastCompShowChange(val) {
-      this.creatZKDelInfoComp.show = val;
+      this.creatXDDelInfoComp.show = val;
     },
     //添加或修改成功事件
     onSaveSuccess() {

@@ -29,12 +29,32 @@ export const constantRouterMap = [
     component: () => import('@/views/register/index').then(m => m.default),
     hidden: true
   },
+  // {
+  //   path: '/dashboard',
+  //   component: () => import('@/views/dashboard/index').then(m => m.default),
+  //   hidden: true
+  // },
   {
-    path: '/dashboard',
-    component: () => import('@/views/dashboard/index').then(m => m.default),
-    hidden: true
-  },
-  {
+    // path: '/',
+    // component: Layout,
+    // redirect: '/dashboard',
+    // meta: {
+    //   title: '首页',
+    
+    // },
+    // alwaysShow: true,
+        
+    // children: [
+    //   {
+    //   path: 'dashboard',
+    //   component: () => import('@/views/dashboard/index').then(m => m.default),
+    //   meta: {
+    //     title: '首页',
+    //     icon: '个人中心',
+    //     keepAlive: true
+        
+    //   },
+    // },
     path: '/',
     component: Layout,
     redirect: '/dashboard',
@@ -107,7 +127,7 @@ export const asyncRouterMap = [
         component: () => import('@/views/permission/user/userManageIndex').then(m => m.default),
         name: 'userManageIndex',
         meta: {
-          title: '用户',
+          title: '用户注册',
           icon: '个人客户',
           keepAlive: true,
           iswhite:true
@@ -117,42 +137,82 @@ export const asyncRouterMap = [
              
     ]
   },
-  // //数据维护
-  // {
-  //   path: '/payfor',
-  //   component: Layout,
-  //   redirect: '/payfor',
-  //   alwaysShow: true,
-  //   meta: {
-  //     title: '在线缴费',
-  //     icon: '个人客户',
-  //   },
-  //   children: [
-  //     {
-  //       path: 'EmptyPayIndex',
-  //       component: () => import('@/views/OnlinePay/EmptyPayIndex').then(m => m.default),
-  //       name: 'EmptyPayIndex',
-  //       meta: {
-  //         title: '空箱登记',
-  //         icon: '个人客户',
-  //         keepAlive: true
-  //       },
+  //数据维护
+  {
+    path: '/DelInfo',
+    component: Layout,
+    redirect: '/DelInfo',
+    alwaysShow: true,
+    meta: {
+      title: '信息发布',
+      icon: '个人客户',
+    },
+    children: [
+      {
+        path: 'XDDelInfo',
+        component: () => import('@/views/InformationDelivery/XD/XDDelInfoIndex').then(m => m.default),
+        name: 'XDDelInfoIndex',
+        meta: {
+          title: '箱东信息发布',
+          icon: '个人客户',
+          keepAlive: true
+        },
       
-  //     },
-  //     {
-  //       path: 'FullPayIndex',
-  //       component: () => import('@/views/OnlinePay/FullPayIndex').then(m => m.default),
-  //       name: 'FullPayIndex',
-  //       meta: {
-  //         title: '重箱登记',
-  //         icon: '个人客户',
-  //         keepAlive: true
-  //       },
+      },
+    
+      {
+        path: 'ZKDelInfo',
+        component: () => import('@/views/InformationDelivery/ZK/ZKDelInfoIndex').then(m => m.default),
+        name: 'ZKDelInfoIndex',
+        meta: {
+          title: '租客信息发布',
+          icon: '个人客户',
+          keepAlive: true
+        },
       
-  //     },
+      },
+    
              
-  //   ]
-  // },
+    ]
+  },
+   //
+   {
+    path: '/OnlineSeach',
+    component: Layout,
+    redirect: '/OnlineSeach',
+    alwaysShow: true,
+    meta: {
+      title: '在线查询',
+      icon: '个人客户',
+    },
+    children: [
+      {
+        path: 'ZKSeachInfo',
+        component: () => import('@/views/OnlineSearch/ZKSeachInfoIndex').then(m => m.default),
+        name: 'ZKSeachInfoIndex',
+        meta: {
+          title: '箱东查询',
+          icon: '个人客户',
+          keepAlive: true
+        },
+      
+      },
+    
+      {
+        path: 'XDSeachInfo',
+        component: () => import('@/views/OnlineSearch/XDSeachInfoIndex').then(m => m.default),
+        name: 'XDSeachInfoIndex',
+        meta: {
+          title: '租客查询',
+          icon: '个人客户',
+          keepAlive: true
+        },
+      
+      },
+    
+             
+    ]
+  },
    
 ]
 

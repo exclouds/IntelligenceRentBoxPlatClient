@@ -20,9 +20,9 @@ const service = axios.create({
 // request拦截器
 service.interceptors.request.use(config => {
   //config.headers['Abp.TenantId'] = 1
-  //if(process.env.NODE_ENV === 'production'){
-   // config.url = 'http://222.173.95.170:9518'+config.url
-  //}
+  // if(process.env.NODE_ENV === 'production'){
+  //  config.url = 'http://47.103.117.243'+config.url
+  // }
   if (getCookie('AbpAuthToken')) {//store.getters.token
     config.headers['Authorization'] = 'Bearer ' + getCookie('AbpAuthToken'); // 让每个请求携带token--['X-Token']为自定义key 请根据实际情况自行修改
   }
