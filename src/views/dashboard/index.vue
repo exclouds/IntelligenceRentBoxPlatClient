@@ -1,80 +1,148 @@
 <template>
-  <div class="page-container">
-    <!-- <div class="top clearfix">
-      <div class="main-div cont-div">
-        订单总数：<span>{{ this.num }}</span>
-      </div>
-      <div class="main-div2 cont-div">
-        <p class="main-div2-title">
-          <i class="el-icon-bell"></i> 系统消息
-          <span class="more">更多>></span>
-        </p>
-        <div>
-          <div></div>
-          <div class="main-div2-img">
-            <img src="../../assets/images/wuxiaoxi.png" class="img">
-          </div>
-        </div>
-      </div>
-      <div class="main-div3 cont-div">
-        <div class="main-div3-img">
-          <img src="../../assets/images/chahua.png" class="img">
-        </div>
-        <div class="main-div3-btn">
-          <el-button icon="el-icon-shopping-cart-full" plain>指定货订舱</el-button>
-          <el-button icon="el-icon-shopping-cart-2" plain>预付货订舱</el-button>
-        </div>
-      </div>
-    </div>
-    <div class="bottom clearfix">
-      <div class="main2-div">
-        <p class="main2-div-title">热门港口</p>
-        <div style="padding-top: 20px;">
-          <el-row>
-          <el-col :span="2" class="col-item-list col-item">青岛港</el-col>
-          <el-col :span="2" class="col-item-list col-txt">日本港</el-col>
-          <el-col :span="2" class="col-item-list col-item">万船港</el-col>
-          <el-col :span="2" class="col-item-list col-txt">青岛大港</el-col>
-          <el-col :span="2" class="col-item-list col-item">厦门</el-col>
-          <el-col :span="2" class="col-item-list col-txt">巴生港</el-col>
-          <el-col :span="2" class="col-item-list col-item">杰贝阿里</el-col>
-          <el-col :span="2" class="col-item-list col-txt">高雄</el-col>
-          <el-col :span="2" class="col-item-list col-item">宁波</el-col>
-          <el-col :span="2" class="col-item-list col-txt">上海</el-col>
-          <el-col :span="2" class="col-item-list col-item">拉斯佩齐亚港</el-col>
-          <el-col :span="2" class="col-item-list col-txt">富查伊拉</el-col>
-        </el-row>
-        </div>
-      </div>
-      <div class="main2-div2">
-        <p class="main2-div2-title">
-          <i class="el-icon-bell"></i> 待办事项
-          <span class="more2">更多>></span>
-        </p>
-      </div>
-    </div> -->
+<el-scrollbar style="height:100%"  class="page-component__scroll"> 
+  <div class="page-container abclass">
+  <!-- <el-carousel indicator-position="outside" >
+    <el-carousel-item v-for="item in 4" :key="item" > 
+   
+    </el-carousel-item>
+  </el-carousel> -->
+ <div style="height:500px">  
+     <el-carousel indicator-position="outside"   style="height:500px">
+    <el-carousel-item style="height:500px"> 
+      <img id="u0_img" class="img" width="100%" height="100%" :src="require('@/views/dashboard/css/images/u1.jpg')" />    
+    </el-carousel-item>
+     <el-carousel-item style="height:500px"> 
+      <img id="u0_img" class="img" width="100%" height="100%" :src="require('@/views/dashboard/css/images/u2.jpg')" />    
+    </el-carousel-item>
+  </el-carousel>
+   
   </div>
+   <div style="padding:20px;font-size:20px;color:blue">
+     <span>智能推荐</span>
+     </div>
+  <div style="padding:20px">
+     <el-tabs style="height:100%"  v-model="activeName"   >
+      <el-tab-pane  name="first" v-if="datalist.xdlist.length>0">
+         <span slot="label" class="tablable"> 箱东信息</span>
+           <el-col :span="8"
+          v-for="(item, index) in datalist.xdlist"
+              :key="index"     
+          >
+          <el-card class="cardclass">
+          <div class="title">{{item.billNO}}</div>
+          <div>起运港：{{item.startStation}}</div>
+          <div>目的港：{{item.endStation}}</div>
+          <div >集装箱信息：{{item.xxcc}}</div>
+          <div>期望成交价：{{item.price}}</div>
+          <div>有效时间：{{item.effectiveSTime+" 至  "+item.effectiveETime}}</div>
+          </el-card>
+          </el-col>
+           <el-col :span="2" :offset="22">
+               <el-link type="primary" @click="openmoreXD">更多</el-link>
+            
+              </el-col>
+      </el-tab-pane>
+      <el-tab-pane  name="second" v-if="datalist.zklist.length>0">
+         <span slot="label" class="tablable"> 租客信息</span>
+           <el-col :span="8"
+          v-for="(item, index) in datalist.zklist"
+              :key="index"     
+          >
+          <el-card class="cardclass">
+          <div class="title">{{item.billNO}}</div>
+          <div>起运港：{{item.startStation}}</div>
+          <div>目的港：{{item.endStation}}</div>        
+          <div>租金：{{item.price}}</div>
+          <div>有效时间：{{item.effectiveSTime+" 至  "+item.effectiveETime}}</div>
+          </el-card>
+          </el-col>
+          <el-col :span="2" :offset="22">
+            <el-link type="primary" @click="openmoreZK">更多</el-link>
+            
+              </el-col>
+      </el-tab-pane>
+     </el-tabs>
+  
+   
+  </div>
+     <div style="height:400px;"> 
+       <div style="position:absolute;z-indent:2;left:0;top:1000;">
+      租箱智能推荐
+      </div> 
+      <img id="u0_img" style="padding-top:50px" class="img" width="100%" height="100%" :src="require('@/views/dashboard/css/images/u3.jpg')" />    
+  
+   <!-- <div style="background:url('views/dashboard/css/images/u3.jpg') no-repeat;height:400px">租箱智能推荐</div>
+  </div> -->
+    </div> 
+  </div>
+  
+</el-scrollbar>
 </template>
 <script>
 import {setCookie, getCookie, delCookie} from 'utils/cookie'
+import {GetIntelligRcommendList} from 'api/InteRecommend'
+
 
 export default {
   name: 'dashboard',
   data() {
     return {
       num: '',
-      protList: []
+     datalist: {
+          xdlist:[],
+          zllist:[]
+      },
+       activeName: "first",
     }
   },
   methods: {
+     GetIntelligRcommendList()
+     {
+        let data=
+        {
+            maxResultCount: 9,
+            skipCount:  0, 
+        };
  
+      this.datalist = [];
+   
+      GetIntelligRcommendList(data)
+        .then(res => {
+         
+          if (res.success) {
+            this.datalist = res.result;        
+          }
+        });
+
+     },
+     openmoreXD(){
+        this.$router.push({
+            path: '/OnlineSeach/XDSeachInfo'
+          
+            });
+     },
+       openmoreZK(){
+         this.$router.push({
+            path: '/OnlineSeach/ZKSeachInfo'
+          
+            });
+     }
   },
   created() {
-   
+   this.GetIntelligRcommendList()
   }
 }
 </script>
 <style lang="scss">
+.abclass{
+background-color: white;
+  .cardclass{
+    height:220px;
+    margin-left:20px;
+    line-height:30px
+  }
+}
+
 .page-container{padding: 20px;min-height: 100vh;}
 .clearfix:after {
     visibility: hidden;

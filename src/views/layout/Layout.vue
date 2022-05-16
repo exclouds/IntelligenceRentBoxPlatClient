@@ -17,11 +17,9 @@
 				</el-col>
 	          	
 			</el-main>	
-			<el-footer style="height:100px" class="lastclass">
+			<el-footer style="height:60px" class="lastclass">
 			<!-- <div  align="center" > -->
-				<div align="center">Copyright © www.Exclouds.com.cn, All Rights Reserved.</div>
-				<div align="center">致力于打造符合中国国情的智慧物流</div>	
-			        
+				<div align="center">Copyright 2021-2022 拼箱平台</div>							        
 			<!-- </div>			 -->
 			</el-footer>
 		</el-container>	 

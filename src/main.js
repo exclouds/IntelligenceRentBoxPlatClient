@@ -96,7 +96,7 @@ router.beforeEach((to, from, next) => {
       }
     }
   } 
-  else if( to.path === '/dashboard' ) {
+  else if( to.path === '/dashboard' ||  to.path === '/InRecommond/InteRecommend') {
  
     store.dispatch('GenerateRoutes', { roles }).then((routeParse) => { // 根据roles权限生成可访问的路由表
       

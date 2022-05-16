@@ -1,5 +1,6 @@
 <template>
   <div class="app-container">
+    <div style="font-size:20px;color:blue;padding-bottom:10px">租客信息：</div>
     <el-form size="mini" label-width="80px" @submist.native.prevent class="ctntype">
       <el-row style="margin-bottom:10px;">
         <el-col :span="4">
@@ -77,7 +78,7 @@
         </el-col>
       </el-row>
     </el-form>
-    <el-row style="height:calc(100% - 80px)">
+    <el-row style="height:calc(100% - 120px)">
       <el-table
         :data="table.data"
         :cell-class-name="tableRowClassName"

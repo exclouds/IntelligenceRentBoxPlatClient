@@ -213,7 +213,31 @@ export const asyncRouterMap = [
              
     ]
   },
-   
+  {
+    path: '/InRecommond',
+    component: Layout,
+    redirect: '/InRecommond',  
+    alwaysShow: false,
+    meta: {
+      title: '用户',
+      icon: '智能推荐',
+    },
+    children: [
+      {
+        path: 'InteRecommend',
+        component: () => import('@/views/InteRecommend/InteRecommendIndex').then(m => m.default),
+        name: 'InteRecommendIndex',
+        meta: {
+          title: '智能推荐',
+          icon: '个人客户',
+          keepAlive: true,
+          iswhite:true
+        },
+       
+      },
+             
+    ]
+  },
 ]
 
 

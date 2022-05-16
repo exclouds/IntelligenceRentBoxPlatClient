@@ -1,5 +1,6 @@
 <template>
   <div class="app-container xdqueryclass">
+  <div style="font-size:20px;color:blue;padding-bottom:10px">箱东信息：</div>
     <el-form size="mini" label-width="100px" @submist.native.prevent class="ctntype">
       <el-row style="margin-bottom:10px;">
         <el-col :span="4">
@@ -114,7 +115,7 @@
         </el-col>
       </el-row>
     </el-form>
-    <el-row style="height:calc(100% - 130px)">
+    <el-row style="height:calc(100% - 160px)">
       <el-table
         :data="table.data"
         :cell-class-name="tableRowClassName"

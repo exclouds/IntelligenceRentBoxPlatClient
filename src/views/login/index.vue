@@ -194,7 +194,7 @@
       localStorage.clear();
       //this.getTenants();
 
-      if(getCookie("userName"))
+       if(getCookie("userName"))
         this.loginForm.userNameOrEmailAddress = getCookie("userName")
 
       if(getCookie("passWord"))
