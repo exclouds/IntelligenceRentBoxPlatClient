@@ -116,7 +116,9 @@ export default {
       windowShow: this.pshow,    
       formLoading: false,      
        id:"",
-       boxDetails:[]
+       boxDetails:[],
+       form:{},
+       rules:{},
                   
     };
   },

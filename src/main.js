@@ -62,7 +62,7 @@ whiteListDispose(constantRouterMap)
 router.beforeEach((to, from, next) => {
   NProgress.start(); // 开启Progress
   var roles=[];
-  
+ 
   if (to.path === '/login' ||to.path === '/register' ) {
     next()
   } 

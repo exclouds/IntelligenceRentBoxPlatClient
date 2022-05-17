@@ -270,9 +270,10 @@
             {{scope.row.creationTime|parseTime('{y}-{m}-{d}')}}
             </template>
         </el-table-column>   
-        <el-table-column align="center" label="操作" width="100px" fixed="right">
+        <el-table-column align="center" label="操作" width="160px" fixed="right">
           <template slot-scope="scope">
-              <div class="tableBtn" @click="createOrEdit(scope.row.id)" >查看箱信息</div>
+              <div class="tableBtn" @click="createOrEdit(scope.row.id)" >箱信息</div>
+              <div class="tableBtn" @click="showfile(scope.row)" >查看附件</div>
           </template>
         </el-table-column>
       </el-table>
@@ -291,8 +292,13 @@
       ref="creatXDDelInfoComp"
       :pshow="creatXDDelInfoComp.show"
       @on-show-change="onCreatCtnTypeContrastCompShowChange"
-      @on-save-success="onSaveSuccess"
+      @on-save-success="getTableList()"
     ></ShowXDDelInfo>
+    <ShowFilePage
+      ref="ShowFilePageComp"
+      :pshow.sync="ShowFilePageComp.show"
+     
+    ></ShowFilePage>
   </div>
 </template>
 <script>
@@ -301,12 +307,12 @@ import { warnMsg } from "utils/messageBox";
 import {GetXDDelInfoList} from "api/OnlineSearch";
 import { GetSiteList,GetLineList } from "api/publicBase/Combox";
 import ShowXDDelInfo from './ShowXDDelInfo'
-
+import ShowFilePage from './ShowFilePage'
 
 export default {
   name: "XDSeachInfoIndex",
   mixins: [tableMixin],
-  components: {ShowXDDelInfo},
+  components: {ShowXDDelInfo,ShowFilePage},
   data() {
     return {
       search: {
@@ -321,6 +327,9 @@ export default {
       siteList: [], //站点
       lineList: [],//
       creatXDDelInfoComp: {
+        show: false
+      },
+      ShowFilePageComp: {
         show: false
       },
     
@@ -354,7 +363,7 @@ export default {
 
       this.tableData = [];
       this.table.loading = true;
-
+      this.$refs.table.clearSelection();
       GetXDDelInfoList(data)
         .then(res => {
           this.table.loading = false;
@@ -379,7 +388,12 @@ export default {
     onCreatCtnTypeContrastCompShowChange(val) {
       this.creatXDDelInfoComp.show = val;
     },  
-    
+    showfile(row){
+       this.ShowFilePageComp.show = true;
+       this.$refs.ShowFilePageComp.form.id=row.id;
+        this.$refs.ShowFilePageComp.form.billno=row.billNO;
+        this.$refs.ShowFilePageComp.getfileList(); 
+    }
   },
   //初始化
   created() {

@@ -111,23 +111,24 @@ export const constantRouterMap = [
 ]
 
 export const asyncRouterMap = [
-  //新增用户
+ 
+  //信息发布
   {
-    path: '/Users',
+    path: '/XDDelInfo',
     component: Layout,
-    redirect: '/Users',  
+    redirect: '/XDDelInfo',  
     alwaysShow: false,
     meta: {
-      title: '用户',
+      title: '箱东信息发布',
       icon: '个人客户',
     },
     children: [
       {
-        path: 'userManage',
-        component: () => import('@/views/permission/user/userManageIndex').then(m => m.default),
-        name: 'userManageIndex',
+        path: '/XDDelInfo',
+        component: () => import('@/views/InformationDelivery/XD/XDDelInfoIndex').then(m => m.default),
+        name: 'XDDelInfoIndex',
         meta: {
-          title: '用户注册',
+          title: '箱东信息发布',
           icon: '个人客户',
           keepAlive: true,
           iswhite:true
@@ -137,29 +138,16 @@ export const asyncRouterMap = [
              
     ]
   },
-  //数据维护
   {
-    path: '/DelInfo',
+    path: '/ZKDelInfo',
     component: Layout,
-    redirect: '/DelInfo',
-    alwaysShow: true,
+    redirect: '/ZKDelInfo',  
+    alwaysShow: false,
     meta: {
-      title: '信息发布',
+      title: '箱东信息发布',
       icon: '个人客户',
     },
     children: [
-      {
-        path: 'XDDelInfo',
-        component: () => import('@/views/InformationDelivery/XD/XDDelInfoIndex').then(m => m.default),
-        name: 'XDDelInfoIndex',
-        meta: {
-          title: '箱东信息发布',
-          icon: '个人客户',
-          keepAlive: true
-        },
-      
-      },
-    
       {
         path: 'ZKDelInfo',
         component: () => import('@/views/InformationDelivery/ZK/ZKDelInfoIndex').then(m => m.default),
@@ -167,20 +155,20 @@ export const asyncRouterMap = [
         meta: {
           title: '租客信息发布',
           icon: '个人客户',
-          keepAlive: true
+          keepAlive: true,
+          iswhite:true
         },
-      
+       
       },
-    
              
     ]
   },
-   //
+   //在线查询
    {
-    path: '/OnlineSeach',
+    path: '/ZKSeachInfo',
     component: Layout,
-    redirect: '/OnlineSeach',
-    alwaysShow: true,
+    redirect: '/ZKSeachInfo',  
+    alwaysShow: false,
     meta: {
       title: '在线查询',
       icon: '个人客户',
@@ -193,11 +181,24 @@ export const asyncRouterMap = [
         meta: {
           title: '箱东查询',
           icon: '个人客户',
-          keepAlive: true
+          keepAlive: true,
+          iswhite:true
         },
-      
+       
       },
-    
+             
+    ]
+  },
+  {
+    path: '/XDSeachInfo',
+    component: Layout,
+    redirect: '/XDSeachInfo',  
+    alwaysShow: false,
+    meta: {
+      title: '在线查询',
+      icon: '个人客户',
+    },
+    children: [
       {
         path: 'XDSeachInfo',
         component: () => import('@/views/OnlineSearch/XDSeachInfoIndex').then(m => m.default),
@@ -205,14 +206,90 @@ export const asyncRouterMap = [
         meta: {
           title: '租客查询',
           icon: '个人客户',
-          keepAlive: true
+          keepAlive: true,
+          iswhite:true
         },
-      
+       
       },
-    
              
     ]
   },
+  // //数据维护
+  // {
+  //   path: '/DelInfo',
+  //   component: Layout,
+  //   redirect: '/DelInfo',
+  //   alwaysShow: true,
+  //   meta: {
+  //     title: '信息发布',
+  //     icon: '个人客户',
+  //   },
+  //   children: [
+  //     {
+  //       path: 'XDDelInfo',
+  //       component: () => import('@/views/InformationDelivery/XD/XDDelInfoIndex').then(m => m.default),
+  //       name: 'XDDelInfoIndex',
+  //       meta: {
+  //         title: '箱东信息发布',
+  //         icon: '个人客户',
+  //         keepAlive: true
+  //       },
+      
+  //     },
+    
+  //     {
+  //       path: 'ZKDelInfo',
+  //       component: () => import('@/views/InformationDelivery/ZK/ZKDelInfoIndex').then(m => m.default),
+  //       name: 'ZKDelInfoIndex',
+  //       meta: {
+  //         title: '租客信息发布',
+  //         icon: '个人客户',
+  //         keepAlive: true
+  //       },
+      
+  //     },
+    
+             
+  //   ]
+  // },
+   //
+  //  {
+  //   path: '/OnlineSeach',
+  //   component: Layout,
+  //   redirect: '/OnlineSeach',
+  //   alwaysShow: true,
+  //   meta: {
+  //     title: '在线查询',
+  //     icon: '个人客户',
+  //   },
+  //   children: [
+  //     {
+  //       path: 'ZKSeachInfo',
+  //       component: () => import('@/views/OnlineSearch/ZKSeachInfoIndex').then(m => m.default),
+  //       name: 'ZKSeachInfoIndex',
+  //       meta: {
+  //         title: '箱东查询',
+  //         icon: '个人客户',
+  //         keepAlive: true
+  //       },
+      
+  //     },
+    
+  //     {
+  //       path: 'XDSeachInfo',
+  //       component: () => import('@/views/OnlineSearch/XDSeachInfoIndex').then(m => m.default),
+  //       name: 'XDSeachInfoIndex',
+  //       meta: {
+  //         title: '租客查询',
+  //         icon: '个人客户',
+  //         keepAlive: true
+  //       },
+      
+  //     },
+    
+             
+  //   ]
+  // },
   {
     path: '/InRecommond',
     component: Layout,
@@ -229,6 +306,32 @@ export const asyncRouterMap = [
         name: 'InteRecommendIndex',
         meta: {
           title: '智能推荐',
+          icon: '个人客户',
+          keepAlive: true,
+          iswhite:true
+        },
+       
+      },
+             
+    ]
+  },
+   //新增用户
+   {
+    path: '/Users',
+    component: Layout,
+    redirect: '/Users',  
+    alwaysShow: false,
+    meta: {
+      title: '用户',
+      icon: '个人客户',
+    },
+    children: [
+      {
+        path: 'userManage',
+        component: () => import('@/views/permission/user/userManageIndex').then(m => m.default),
+        name: 'userManageIndex',
+        meta: {
+          title: '用户注册',
           icon: '个人客户',
           keepAlive: true,
           iswhite:true

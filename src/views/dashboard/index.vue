@@ -112,7 +112,8 @@ export default {
           if (res.success) {
             this.datalist = res.result;        
           }
-        });
+        })
+        .catch(()=>{});
 
      },
      openmoreXD(){
@@ -128,7 +129,7 @@ export default {
             });
      }
   },
-  created() {
+  mounted() {
    this.GetIntelligRcommendList()
   }
 }

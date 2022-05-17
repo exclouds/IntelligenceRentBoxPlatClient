@@ -1,14 +1,14 @@
 <template>
-  <div>
+  <div class="showclass">
     <el-dialog
       :title="form.id==''?'新增箱东信息发布':'编辑箱东信息发布'"
       v-dialogDrag
       :visible.sync="windowShow"
-      width="1200px"
+      width="1800px"
       :close-on-click-modal="false"
-      :close-on-press-escape="false"
+      :close-on-press-escape="false"    
     >
-      <el-form
+       <el-form
         size="mini"
         :model="form"
         ref="ruleForm"
@@ -16,7 +16,12 @@
         v-loading="formLoading"
         label-width="120px"
       >
+    <el-row style="height:100%">
+     <el-col :span="15" >
+   
+    
         <el-row>
+
           <el-col :span="8">
             <el-form-item label="单号：" prop="billNO">
                <el-input placeholder="单号"    style="width:100%;" 
@@ -175,12 +180,12 @@
              <el-button   @click="addItem" type="primary">增加</el-button>
            </el-form-item>
           </el-row>
-         <el-row>
+         
+           <el-row>
           
-          <el-col :span="22" :offset="1">
+          <el-col :span="23" :offset="1">
               <el-table
-              :cell-class-name="tableRowClassName"
-                v-loading="table.loading"
+              :cell-class-name="tableRowClassName"           
                 :data="form.boxDetails"
                 :row-key = "getRowKeys"
                 border
@@ -188,8 +193,8 @@
                 highlight-current-row
                 fit
                 height="260px"
-                style="width: 100%"
-                ref="table"
+                style="width:100%"
+                ref="table1"
               >
               <!-- <el-table-column :reserve-selection="true" type="selection" width="40"></el-table-column> -->
                 <el-table-column type="index" align="center" label="序号" width="50">
@@ -218,7 +223,7 @@
                   align="center"
                   prop="box"
                   label="箱型"  
-                  width="150"    
+                  width="130"    
                   sortable="custom"
                 >
                  <template slot-scope="scope">
@@ -227,7 +232,7 @@
                     size="mini"
                     v-model="scope.row.box"
                     filterable
-                    placeholder="尺寸"
+                    placeholder="箱型"
                     style="width: 100%"
                   >
                     <el-option
@@ -245,7 +250,7 @@
                   prop="size"
                   show-overflow-tooltip
                   label="尺寸"
-                width="150"
+                width="130"
                   sortable="custom"
                 >
                  <template slot-scope="scope">
@@ -314,7 +319,7 @@
                   prop="remarks"
                   show-overflow-tooltip
                   label="备注"
-                
+                 width="200"
                   sortable="custom"
                 >
                  <template slot-scope="scope">
@@ -328,7 +333,7 @@
                  </template>
                 </el-table-column>
                              
-                <el-table-column align="center" label="操作" width="130" >
+                <el-table-column align="center" label="操作"  >
                     <template slot-scope="scope"  >
                         <div class="tableBtn"  @click="deleteItem((countIndex(scope.$index)-1))" 
                         v-if="(countIndex(scope.$index)-1) !== 0" 
@@ -338,15 +343,15 @@
               </el-table>
         
           </el-col>
-           </el-row>
-        <el-row>
-          <el-col :span="24">
+           <!-- </el-row>
+      <el-row> -->
+          <el-col :span="24" style="padding-top:20px">
             <el-form-item label="备注：" prop="remarks">
               <el-input
                 type="textarea"
                 v-model="form.remarks"
                 placeholder="请输入备注"
-                :autosize="{ minRows: 2, maxRows: 6}"
+               
                 @input="form.remarks = form.remarks.toUpperCase()"
                 style="width:100%"
                 maxlength="500"
@@ -355,7 +360,102 @@
             </el-form-item>
           </el-col>
         </el-row>
-      </el-form>
+           
+     </el-col>
+      <el-col :span="8" :offset="1" style="height:100%">
+
+        
+       <el-row style="padding:10px">
+          <div style="padding-bottom:10px">附件信息</div>
+            <el-col :span="6" style="padding-left:10px">
+                 <el-button type="primary" @click="onBatchDelete()" :loading="delbtnLoading" size="small">批量删除</el-button>
+          
+             </el-col>
+           <el-col :span="18">
+                <el-upload
+                class="upload-demo"
+                action="/DBService/api/services/app/Attachment/AnnexUploaFile"
+                ref="upload"            
+                :auto-upload="false"
+                :http-request="httpRequest"
+                :multiple="true"
+                :show-file-list="true">
+                <el-button slot="trigger" size="small" type="primary">选取附件</el-button>
+                <el-button style="margin-left: 10px;" size="small" type="success" @click="submitUpload">上传附件</el-button>
+              </el-upload>
+          
+          </el-col>
+           
+       </el-row>
+         <el-row>  
+            <el-col :span="22" :offset="1">
+
+              <el-table
+               :cell-class-name="tableRowClassName"
+                v-loading="table.loading"
+                :data="filelist"
+                :row-key = "getRowKeys"
+                border
+                stripe
+                highlight-current-row
+                fit
+                height="300px"
+                style="width: 100%"
+                ref="table"
+              >
+              <el-table-column :reserve-selection="true" type="selection" width="40"></el-table-column>
+                <el-table-column type="index" align="center" label="序号" width="50">
+                  <template slot-scope="scope">{{countIndex(scope.$index)}}</template>
+                </el-table-column>
+                <el-table-column
+                  align="center"
+                  prop="name"
+                  show-overflow-tooltip
+                  label="文件名称"
+                               
+                >   
+                   <template slot-scope="scope">
+           
+                  <div
+                    class="tableBtn"
+                    @click="showimg(scope.row.url)"
+                    v-if="                  
+                      scope.row.url != '' &&
+                      scope.row.url != null
+                    "
+                  >
+                    {{ scope.row.name }}
+                  </div>
+                  <span v-else>{{ scope.row.url }}</span>
+                </template>             
+                </el-table-column>
+              
+                <el-table-column
+                  align="center"
+                  prop="creationTime"
+                  label="上传时间"  
+                  width="150"    
+                 show-overflow-tooltip
+                >
+                  <template slot-scope="scope">{{scope.row.creationTime|parseTime()}}</template>
+                </el-table-column>
+              
+                <el-table-column align="center" label="操作" width="100" >
+                    <template slot-scope="scope"  >
+                        <div class="tableBtn"  @click="deletefile(scope.row.id)" 
+                     
+                        >删除</div>                                
+                    </template>
+                  </el-table-column>
+              </el-table>
+        
+            </el-col>
+          </el-row>
+     
+     </el-col>
+        
+    </el-row>
+    </el-form>
       <span slot="footer" class="dialog-footer">
         <el-button @click="windowShow = false" size="small">取 消</el-button>
         <el-button type="primary" @click="save()" :loading="btnLoading" size="small">确 定</el-button>
@@ -370,7 +470,14 @@ import {XDDelInfoAddEdit,GetXDDelInfoSingle} from "api/InformationDelivery/XD";
 import { GetSiteList,GetLineList } from "api/publicBase/Combox";
 import { pickerRangeOptions } from "consts/common";
 import { parseTime } from "utils";
+import upload from "components/upload/upload";
+import { GetUploaFile,GetUPFile,BathDeltefile } from "api/publicBase/Attachment";
+import { warnMsg } from "utils/messageBox";
+
 export default {
+  components: {
+    upload
+  },
   props: {
     pshow: {
       type: Boolean,
@@ -412,8 +519,11 @@ export default {
             boxAge: 0,
             remarks:  ""
           }],
+         
         };
         this.lineList=[];
+         this.filelist=[];
+         this.filecontent=[];
         this.$emit("on-show-change", newValue);
       }
     }
@@ -423,6 +533,7 @@ export default {
       pickerRangeOptions,
       windowShow: this.pshow,
       btnLoading: false,
+      delbtnLoading: false,
       formLoading: false,
       form: {
         id: "",
@@ -452,12 +563,13 @@ export default {
         }],
         
       },
+      filelist: [],
       flag: true,
       siteList: [],
       lineList: [],
       boxList: [],
       sizeList: [],
-     
+     filecontent:[],
       //定义字段校验规则
       rules: {
         //billNO: [{ required: true, message: "请选择船公司" }],
@@ -479,6 +591,9 @@ export default {
     };
   },
   methods: {
+      getRowKeys(row) {
+      return row.id.toString();
+    },
      //校验时间
         validatetime(rule, value, callback) {
           
@@ -550,6 +665,7 @@ export default {
         submitDateRange.push(res.result.boxInfo.effectiveETime);
         this.$set(this.form, 'submitDateRange', submitDateRange);
         this.form.boxDetails=res.result.boxDetails;
+         this.filelist=res.result.fileList;
         //this.form.submitDateRange=submitDateRange;
           this.formLoading = false;
         })
@@ -606,9 +722,14 @@ export default {
             .then(res => {
               if(res.success)
               {
-                this.btnLoading = false;
-              this.windowShow = false;
-              this.$emit("on-save-success");
+                 this.btnLoading = false;
+              // this.windowShow = false;
+              // this.$emit("on-save-success");
+                if(!this.form.id){
+                     this.form.id=res.result.id;
+                     this.form.billNO=res.result.billNO;
+                }
+
               }
               
             })
@@ -617,7 +738,114 @@ export default {
             });
         }
       });
+    },
+        // 附件上传
+      submitUpload() {
+        if(this.form.id === '' || this.form.id ===null || this.form.id ===undefined) {
+          warnMsg("请先保存信息后再上传附件");
+          return;
+        } else {
+         this.$confirm('您是否确定马上上传附件？', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then((action) => {
+        if(action === 'confirm'){
+          this.$refs.upload.submit();
+        }
+      }).catch(() => {
+        this.$message({
+          type: 'info',
+          message: '已取消'
+        });
+      });
+        }
+      },
+    httpRequest(param){
+      
+      let formData = new FormData();
+          formData.append("files", param.file);
+          formData.append("type", "XD");
+          formData.append("billno", this.form.billNO);
+          formData.append("id", this.form.id);
+          GetUploaFile(formData).then(res => {
+            if (res.success) {         
+              this.$message.success('文件上传成功!');
+              this.getfileList();
+            }
+          })
+    },
+   
+    getfileList()
+    {
+      if(this.form.id)
+      {
+        this.$refs.table.clearSelection();
+        this.table.loading=true;
+        GetUPFile({id:this.form.id,billno:this.form.billNO}).then(res => {
+            if (res.success) {          
+             this.filelist=res.result;
+              this.table.loading=false;
+            }
+          })
+          .catch(()=>{
+             this.table.loading=true;
+          })
+      }
+    },
+    deletefile(id)
+    {
+       this.$confirm("是否确定删除", "提示", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        type: "warning"
+      }).then(({ value }) => {
+        BathDeltefile([id]).then(res => {
+        this.getfileList();        
+      });
+      });
+    },
+    //批量删除
+    onBatchDelete() {
+      if (this.$refs.table.selection.length === 0) {
+        warnMsg("请选择要删除的数据");
+        return;
+      }
+      this.$confirm("是否确定删除", "提示", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        type: "warning"
+      }).then(({ value }) => {
+        let arr = this.$refs.table.selection.map(item => item.id);
+        this.delbtnLoading=true;
+        BathDeltefile(arr).then(res => {
+           this.delbtnLoading=false;
+          this.getfileList();  
+        })
+        .catch(()=>{
+          this.delbtnLoading=false;
+        });
+      });
+    },
+    showimg(eleurl){
+        if (eleurl === "" || eleurl === null) {
+        warnMsg("未找相关附件地址");
+        return;
+      }
+      window.open(eleurl, "_blank");
     }
+    
   }
 };
 </script>
+
+<style lang="scss">
+.showclass {
+  .el-dialog{
+    height: 750px;
+  }
+  .el-dialog__wrapper {
+   height:100% !important;
+  }
+}
+</style>

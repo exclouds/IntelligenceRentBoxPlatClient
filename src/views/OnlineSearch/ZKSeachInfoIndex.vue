@@ -189,7 +189,11 @@
             {{scope.row.creationTime|parseTime('{y}-{m}-{d}')}}
             </template>
         </el-table-column>
-       
+        <el-table-column align="center" label="操作" width="100px" fixed="right">
+          <template slot-scope="scope">        
+              <div class="tableBtn" @click="showfile(scope.row)" >查看附件</div>
+          </template>
+        </el-table-column>
       </el-table>
       <el-pagination
         style="margin-top:10px;"
@@ -202,7 +206,11 @@
         layout="total, sizes, prev, pager, next, jumper"
       ></el-pagination>
     </el-row>
-    
+     <ShowFilePage
+      ref="ShowFilePageComp"
+      :pshow.sync="ShowFilePageComp.show"
+     
+    ></ShowFilePage>
 
   </div>
 </template>
@@ -212,13 +220,13 @@ import { warnMsg } from "utils/messageBox";
 
 import {GetZKDelInfoList} from "api/OnlineSearch";
 import { GetSiteList,GetLineList } from "api/publicBase/Combox";
-
+import ShowFilePage from './ShowFilePage'
 
 
 export default {
   name: "ZKSeachInfoIndex",
   mixins: [tableMixin],
-  components: {},
+  components: {ShowFilePage},
   data() {
     return {
     
@@ -231,7 +239,10 @@ export default {
       },
       siteList: [], //站点
       lineList: [],//
-      btnloading:false
+      btnloading:false,
+      ShowFilePageComp: {
+        show: false
+      },
     
     };
   },
@@ -279,6 +290,12 @@ export default {
           this.table.loading = false;
         });
     },
+     showfile(row){
+       this.ShowFilePageComp.show = true;
+       this.$refs.ShowFilePageComp.form.id=row.id;
+        this.$refs.ShowFilePageComp.form.billno=row.billNO;
+        this.$refs.ShowFilePageComp.getfileList(); 
+    }
     
   },
   //初始化

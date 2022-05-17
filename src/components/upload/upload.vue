@@ -2,7 +2,7 @@
   <el-upload
     ref="upload"
     class="upload-demo"
-    action=""
+    action="/DBService/api/services/app/Attachment/AnnexUploaFile"
     style="float:left"
     :multiple="uploadMultiple"
     :show-file-list="isShowFileList"
@@ -13,6 +13,7 @@
     :before-upload="beforeUpload"
     :on-success="handleSuccess"
     :pIsCheck="pIsCheck"
+    :auto-upload="autoupload"
   >
     <slot>
       <el-button type="primary" style="margin-top:15px;margin-left:10px" icon="el-icon-plus">上传文件</el-button>
@@ -35,6 +36,10 @@ export default {
     pIsCheck: {
       type: Boolean,
       default: true //验证扩展名 false不验证
+    },
+    autoupload: {
+      type: Boolean,
+      default: true //是否自动上传，默认为自动上传
     },
     pAcceptFormat: {
       //上传文件的类型
