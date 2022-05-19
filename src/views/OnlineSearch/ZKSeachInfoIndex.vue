@@ -132,7 +132,14 @@
           sortable="custom"
           show-overflow-tooltip
         ></el-table-column>
-        
+          <el-table-column
+          align="center"
+          prop="xxcc"
+          label="箱型尺寸"
+          width="120px"
+          sortable="custom"
+          show-overflow-tooltip
+        ></el-table-column>
         <el-table-column
           align="center"
           prop="effectiveSTime"
@@ -189,8 +196,9 @@
             {{scope.row.creationTime|parseTime('{y}-{m}-{d}')}}
             </template>
         </el-table-column>
-        <el-table-column align="center" label="操作" width="100px" fixed="right">
-          <template slot-scope="scope">        
+        <el-table-column align="center" label="操作" width="160px" fixed="right">
+          <template slot-scope="scope">  
+            <div class="tableBtn" @click="createOrEdit(scope.row.billNO)" >箱信息</div>      
               <div class="tableBtn" @click="showfile(scope.row)" >查看附件</div>
           </template>
         </el-table-column>
@@ -206,6 +214,12 @@
         layout="total, sizes, prev, pager, next, jumper"
       ></el-pagination>
     </el-row>
+     <ShowXDDelInfo
+      ref="creatXDDelInfoComp"
+      :pshow="creatXDDelInfoComp.show"
+      @on-show-change="onCreatCtnTypeContrastCompShowChange"
+      @on-save-success="getTableList()"
+    ></ShowXDDelInfo>
      <ShowFilePage
       ref="ShowFilePageComp"
       :pshow.sync="ShowFilePageComp.show"
@@ -217,7 +231,7 @@
 <script>
 import { tableMixin } from "mixin/commTable";
 import { warnMsg } from "utils/messageBox";
-
+import ShowXDDelInfo from './ShowXDDelInfo'
 import {GetZKDelInfoList} from "api/OnlineSearch";
 import { GetSiteList,GetLineList } from "api/publicBase/Combox";
 import ShowFilePage from './ShowFilePage'
@@ -226,7 +240,7 @@ import ShowFilePage from './ShowFilePage'
 export default {
   name: "ZKSeachInfoIndex",
   mixins: [tableMixin],
-  components: {ShowFilePage},
+  components: {ShowXDDelInfo,ShowFilePage},
   data() {
     return {
     
@@ -240,6 +254,9 @@ export default {
       siteList: [], //站点
       lineList: [],//
       btnloading:false,
+       creatXDDelInfoComp: {
+        show: false
+      },
       ShowFilePageComp: {
         show: false
       },
@@ -290,6 +307,15 @@ export default {
           this.table.loading = false;
         });
     },
+     //打开添加或修改
+    createOrEdit(billno) {
+       this.creatXDDelInfoComp.show = true;
+       this.$refs.creatXDDelInfoComp.billno=billno;
+        this.$refs.creatXDDelInfoComp.getTableList();     
+    },
+    onCreatCtnTypeContrastCompShowChange(val) {
+      this.creatXDDelInfoComp.show = val;
+    },  
      showfile(row){
        this.ShowFilePageComp.show = true;
        this.$refs.ShowFilePageComp.form.id=row.id;

@@ -32,7 +32,8 @@
           <el-card class="cardclass">
           <div class="title">{{item.billNO}}</div>
           <div>起运港：{{item.startStation}}</div>
-          <div>目的港：{{item.endStation}}</div>        
+          <div>目的港：{{item.endStation}}</div> 
+           <div >集装箱信息：{{item.xxcc}}</div>       
           <div>租金：{{item.price}}</div>
           <div>有效时间：{{item.effectiveSTime+" 至  "+item.effectiveETime}}</div>
           </el-card>

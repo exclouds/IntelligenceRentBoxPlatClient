@@ -161,7 +161,7 @@
                 setCookie('AbpCompanyType',res.result.companyType);
                 setCookie('ABPName',res.result.name);       
                
-               that.$router.push({
+               this.$router.push({
                   path: '/dashboard'
                 });
                 

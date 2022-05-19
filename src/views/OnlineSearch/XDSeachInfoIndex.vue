@@ -272,7 +272,7 @@
         </el-table-column>   
         <el-table-column align="center" label="操作" width="160px" fixed="right">
           <template slot-scope="scope">
-              <div class="tableBtn" @click="createOrEdit(scope.row.id)" >箱信息</div>
+              <div class="tableBtn" @click="createOrEdit(scope.row.billNO)" >箱信息</div>
               <div class="tableBtn" @click="showfile(scope.row)" >查看附件</div>
           </template>
         </el-table-column>
@@ -380,10 +380,10 @@ export default {
         });
     },  
      //打开添加或修改
-    createOrEdit(id) {
+    createOrEdit(billno) {
        this.creatXDDelInfoComp.show = true;
-       this.$refs.creatXDDelInfoComp.id=id;
-        this.$refs.creatXDDelInfoComp.getTableList(id);     
+       this.$refs.creatXDDelInfoComp.billno=billno;
+        this.$refs.creatXDDelInfoComp.getTableList();     
     },
     onCreatCtnTypeContrastCompShowChange(val) {
       this.creatXDDelInfoComp.show = val;

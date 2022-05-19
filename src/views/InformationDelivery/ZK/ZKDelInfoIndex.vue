@@ -154,7 +154,14 @@
           sortable="custom"
           show-overflow-tooltip
         ></el-table-column>
-        
+          <el-table-column
+          align="center"
+          prop="xxcc"
+          label="箱型尺寸"
+          width="120px"
+          sortable="custom"
+          show-overflow-tooltip
+        ></el-table-column>
         <el-table-column
           align="center"
           prop="effectiveSTime"
@@ -331,7 +338,7 @@ export default {
       },
       siteList: [], //站点
       lineList: [],//
-      btnloading:false
+      btnloading:false,
     
     };
   },
@@ -351,6 +358,7 @@ export default {
         this.lineList = res.result;
       });
     },
+   
     //获取列表
     getTableList() {
       this.tableData = [];
@@ -382,15 +390,13 @@ export default {
  
     //打开添加或修改
     createOrEdit(id) {
-      if (id) {
-        this.creatZKDelInfoComp.show = true;
-        this.$refs.creatZKDelInfoComp.getsiteList();
-        this.$refs.creatZKDelInfoComp.GetZKDelInfoSingle(id);
-              
-      } else {
-        this.creatZKDelInfoComp.show = true;
-        this.$refs.creatZKDelInfoComp.getsiteList();     
-      }
+       this.creatZKDelInfoComp.show = true;
+       this.$refs.creatZKDelInfoComp.getsiteList();
+       this.$refs.creatZKDelInfoComp.getcclist();
+       this.$refs.creatZKDelInfoComp.getxxlist();
+      if (id) {       
+        this.$refs.creatZKDelInfoComp.GetZKDelInfoSingle(id);             
+      } 
     },
     onCreatCtnTypeContrastCompShowChange(val) {
       this.creatZKDelInfoComp.show = val;

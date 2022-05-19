@@ -46,7 +46,15 @@ export function BatchOP(obj) {
    
   });
 }
-
+//获取箱信息
+export function GetBoxDetail(obj) {
+  return fetch({
+    url: '/DBService/api/services/app/ZKInforDelivery/GetBoxDetail',
+    method: 'get',
+    params:obj
+   
+  });
+}
 
 
 

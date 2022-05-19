@@ -105,7 +105,7 @@ export default {
       // if (this.$refs["ruleForm"]) 
       //  this.$refs["ruleForm"].resetFields(); //清空验证
       if (!newValue) {     
-       this.id="";
+       this.billno="";
         this.boxDetails=[];
         this.$emit("on-show-change", newValue);
       }
@@ -115,7 +115,7 @@ export default {
     return {     
       windowShow: this.pshow,    
       formLoading: false,      
-       id:"",
+       billno:"",
        boxDetails:[],
        form:{},
        rules:{},
@@ -128,7 +128,7 @@ export default {
     getTableList() {
       this
       this.formLoading = true;
-      GetXDBoxDetail({ id: this.id })
+      GetXDBoxDetail({ billno: this.billno })
         .then(res => {
           this.boxDetails = res.result;           
           this.formLoading = false;

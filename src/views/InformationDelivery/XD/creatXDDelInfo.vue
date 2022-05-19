@@ -725,11 +725,11 @@ export default {
                  this.btnLoading = false;
               // this.windowShow = false;
               // this.$emit("on-save-success");
-                if(!this.form.id){
-                     this.form.id=res.result.id;
-                     this.form.billNO=res.result.billNO;
-                }
-
+                // if(!this.form.id){
+                //      this.form.id=res.result.id;
+                //      this.form.billNO=res.result.billNO;
+                // }
+               this.GetXDDelInfoSingle(res.result.id);
               }
               
             })
