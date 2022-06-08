@@ -1,39 +1,92 @@
 <template>
   <div style="width:100%;"  class="sidebarcalss">
-    <el-col :span="6" :offset="1"  align="center" class="leftshowclass">
-      <span>云租箱平台</span>
+    <el-col :span="5" :offset="1"  align="center" class="leftshowclass">
+      <el-col :span="11" style=" text-align:right;">
+         <img id="u0_img" class="img"  
+          :src="require('@/views/dashboard/css/images/logo.png')" />
+      </el-col>
+      <el-col :span="11" style="padding-top:10px">
+        <span>云租箱平台</span>
+      </el-col>
+      
+      
     </el-col>
-    <el-col :span="12"  >
+    <el-col :span="14"  >
       <el-menu
          :unique-opened = true
          :show-timeout="200"
          :default-activde="$route.path"
          mode="horizontal" 
          text-color="#545c64"
-        active-text-color="#409EFF"
-      
+          active-text-color="#409EFF"
+     
         class="menuclass"
         
-      >
-        <sidebar-item v-for="route in permission_routers" :key="route.path" :item="route" 
-        :base-path="route.path"/>
+      > 
+        <el-menu-item index="1">
+         <router-link  to="/dashboard">首页</router-link> 
+         </el-menu-item>
+         <el-menu-item index="2">
+            <router-link v-if="type==='1' ||type==='3' "   to="/XDDelInfo/XDDelInfo">信息发布</router-link> 
+           <router-link v-else to="/ZKDelInfo/ZKDelInfo">信息发布</router-link>
+           </el-menu-item>      
+         <!-- <el-menu-item index="21">
+            <router-link   to="/XDDelInfo/XDDelInfo">箱东信息发布</router-link> 
+          </el-menu-item>  
+
+           <el-menu-item index="22">
+           <router-link  to="/ZKDelInfo/ZKDelInfo">租客信息发布</router-link>
+           </el-menu-item>   -->
+
+         <el-menu-item index="3"> 
+           <router-link v-if="type==='1' ||type==='3' " to="/ZKSeachInfo/ZKSeachInfo">在线查询</router-link>
+          <router-link v-else to="/XDSeachInfo/XDSeachInfo">在线查询</router-link> 
+           </el-menu-item>
+
+           <!-- <el-menu-item index="31"> 
+           <router-link  to="/ZKSeachInfo/ZKSeachInfo">租客在线查询</router-link>
+         
+           </el-menu-item>
+           <el-menu-item index="32">         
+               <router-link  to="/XDSeachInfo/XDSeachInfo">箱东在线查询</router-link> 
+           </el-menu-item> -->
+        
+         <el-menu-item index="4">
+         <router-link  to="/InRecommond/InteRecommend">智能查询</router-link> 
+           </el-menu-item>
+         
+        <!-- <sidebar-item v-for="route in permission_routers" :key="route.path" :item="route" 
+        :base-path="route.path"/> -->
       </el-menu>
     </el-col>
-    <el-col :span="6"  align="center" style="padding-top:20px">
+    <el-col :span="4"  align="center" style="padding-top:20px">
       <el-dropdown v-if="name">
 			<span class="el-dropdown-link">
-				{{name}}<i class="el-icon-arrow-down el-icon--right"></i>
+				{{'您好，'+name}}<i class="el-icon-arrow-down el-icon--right"></i>
 			</span>
 			<el-dropdown-menu slot="dropdown">
 				<el-dropdown-item><span @click="logout" style="display:block;">退出登录</span></el-dropdown-item>
 						<el-dropdown-item><span @click="onupdatePasswordComp()" style="display:block;">修改密码</span></el-dropdown-item>
-				
+					<el-dropdown-item v-if="type==='2' ||type==='3' ">
+            <span @click="addnewusr" style="display:block;">用户注册</span>
+            </el-dropdown-item>
 			</el-dropdown-menu>
 		</el-dropdown>      
 	    <el-link v-if="!name" type="primary" @click="onlogin()">{{"登录/注册"}}</el-link> 
 		   <!-- <span style="padding-left:20px">APP下载</span>
 		     <span style="padding-left:20px">关注我们</span> -->
+     
+           
+      
     </el-col>
+      <el-col :span="1"  align="center" >
+        <el-tooltip content="客服电话：8888888" placement="top" effect="light">         
+           <img id="u0_img"  class="img" 
+           src="../../assets/images/u87.png" />
+          </el-tooltip>
+        
+        
+      </el-col>
     <!-- <el-scrollbar wrap-class="scrollbar-wrapper" class="sideBar"> -->
      
     <!-- </el-scrollbar> -->
@@ -41,7 +94,7 @@
         <update-password ref="updatePasswordComp" :pshow.sync="updatePasswordComp.show"  @on-save-success="onSaveSuccess"></update-password>
         <login ref="loginComp" 
         :pshow.sync="loginComp.show" 
-       
+         @on-save-success="loginSuccess"
          >
          </login>
   </div>
@@ -53,6 +106,7 @@ import SidebarItem from './SidebarItem'
  import updatePassword from './updatePassword'
  import login from './login'
  import {LogOut} from 'api/user/tenant'
+ import {getCookie} from 'utils/cookie'
 
 export default {
 components: { SidebarItem ,updatePassword,login},
@@ -70,8 +124,8 @@ computed: {
 					} ,
          loginComp: {
 						show: false
-					} 
-				
+					} ,
+				type:"",
 			}
 		},
 methods: {
@@ -95,19 +149,32 @@ methods: {
 					//console.log(getToken)
 					LogOut().then(res => {
 					})
-					//location.reload(); // 为了重新实例化vue-router对象 避免bug
-					this.$store.commit('CLEAN_VIEW')
-					window.location.href = process.env.LOGOUT_URL
-					location.reload();
+          this.$store.commit('CLEAN_VIEW');
+					location.reload(); // 为了重新实例化vue-router对象 避免bug
+				
+          //this.$router.push({ path: '/login' });
+					//window.location.href = process.env.LOGOUT_URL
+					//
 					//this.$router.push({ path: '/login' })
 					
 				});
        },
-     
+     loginSuccess(){
+       location. reload();
+     },
+     addnewusr()
+     {
+        this.$router.push({ path: '/Users/userManage' })
+     }
 
 		   
 },
 created(){
+   this.type="";
+      if(getCookie("AbpCompanyType"))
+      {
+        this.type=getCookie("AbpCompanyType");
+      }
 }
 
 }
@@ -119,7 +186,7 @@ created(){
       }
 .sidebarcalss{
 .leftshowclass{  
-   padding-top: 20px; 
+   padding-top: 10px; 
     font-weight: 700;
     font-style: normal;
     font-size: 24px;

@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="addzkset">
     <el-dialog
       :title="form.id==''?'新增租客信息发布':'编辑租客信息发布'"
       v-dialogDrag
@@ -16,10 +16,8 @@
         v-loading="formLoading"
         label-width="120px"
       >
-      <el-row style="height:100%">
-       <el-col :span="15" >
-          <el-row>
-          <el-col :span="8">
+        <el-row>
+          <el-col :span="5">
             <el-form-item label="单号：" prop="billNO">
                <el-input placeholder="单号"    style="width:100%;" 
                disabled
@@ -29,7 +27,7 @@
              
             </el-form-item>
           </el-col>
-          <el-col :span="8">
+          <el-col :span="5">
             <el-form-item label="起运站：" prop="startStation">
               <el-select
               v-model="form.startStation"
@@ -49,26 +47,7 @@
           </el-col>
         <!-- </el-row>
         <el-row> -->
-          <el-col :span="8">
-            <el-form-item label="目的站：" prop="endStation">
-               <el-select
-              v-model="form.endStation"
-              placeholder="目的站"
-              style="width:99%"
-              clearable
-              filterable
-              @change="getlineList('')" 
-            >
-              <el-option
-                v-for="item in siteList"
-                :key="item.value"
-                :label="item.displayText"
-                :value="item.value"
-              ></el-option>
-            </el-select>
-            </el-form-item>
-          </el-col>
-           <el-col :span="8">
+            <el-col :span="5">
             <el-form-item label="所属路线：" prop="line">
               <el-select
                 v-model="form.line"
@@ -76,6 +55,7 @@
                 style="width:100%"
                 clearable
                 filterable
+                @change="getlinesiteList('')" 
               >
                <el-option
                 v-for="item in lineList"
@@ -86,9 +66,30 @@
               </el-select>
             </el-form-item>
           </el-col>
+          <el-col :span="6">
+            <el-form-item label="目的站：" prop="endStation">
+               <el-select
+              v-model="form.endStation"
+              placeholder="目的站"
+              style="width:99%"
+              clearable
+              filterable
+              multiple
+              collapse-tags
+            >
+              <el-option
+                v-for="item in linesiteList"
+                :key="item.value"
+                :label="item.displayText"
+                :value="item.value"
+              ></el-option>
+            </el-select>
+            </el-form-item>
+          </el-col>
+         
         <!-- </el-row>       
          <el-row> -->
-            <el-col :span="8">
+            <el-col :span="5">
             <el-form-item label="期望成交价：" prop="hopePrice">
                 <el-input-number
                     placeholder="价格"
@@ -101,19 +102,20 @@
             </el-form-item>
             </el-col>
         
-             <el-col :span="8">
+             <el-col :span="5">
             <el-form-item label="是否启用：" >
              <el-select
               v-model="form.isEnable"
               placeholder="是否启用"           
-              filterable          
+              filterable     
+               style="width: 100%"   
             >
               <el-option label="是" :value="true"></el-option>
               <el-option label="否" :value="false"></el-option>
             </el-select>
             </el-form-item>
           </el-col>
-            <el-col :span="10">
+            <el-col :span="11">
             <el-form-item label="有效时间：" prop="submitDateRange">
               <el-date-picker
                 v-model="form.submitDateRange"
@@ -129,16 +131,31 @@
               ></el-date-picker>  
             </el-form-item>
           </el-col>
+            <el-col :span="21" >
+            <el-form-item label="备注：" prop="remarks">
+              <el-input
+                type="textarea"
+                v-model="form.remarks"
+                placeholder="请输入备注"
+               
+                @input="form.remarks = form.remarks.toUpperCase()"
+                style="width:100%"
+                maxlength="500"
+                show-word-limit
+              ></el-input>
+            </el-form-item>
+          </el-col>
         </el-row>
-           <el-row>
-           <el-form-item label="集装箱信息：" prop="boxDetails">
-             <el-button   @click="addItem" type="primary">增加</el-button>
-           </el-form-item>
-          </el-row>
-         
-           <el-row>
-          
-          <el-col :span="23" :offset="1">
+      <el-divider></el-divider>
+      <el-row>
+       <el-col :span="15" style="padding-left:30px"> 
+         <div style="padding-bottom:40px">   
+           <el-col :span="21" style="padding-top: 10px;" >   <span class="captitle">集装箱信息：</span></el-col>
+            <el-col :span="2"  >     
+              <el-button style="width:100px;padding:8px"  @click="addItem" type="primary">增加</el-button>
+              </el-col>
+          </div>                      
+          <!-- <el-col :span="23" > -->
               <el-table
               :cell-class-name="tableRowClassName"           
                 :data="form.boxDetails"
@@ -147,7 +164,7 @@
                 stripe
                 highlight-current-row
                 fit
-                height="260px"
+                height="320px"
                 style="width:100%"
                 ref="table1"
               >
@@ -297,36 +314,26 @@
                   </el-table-column>
               </el-table>
         
-          </el-col>
-           <!-- </el-row>
-      <el-row> -->
-          <el-col :span="24" style="padding-top:20px">
-            <el-form-item label="备注：" prop="remarks">
-              <el-input
-                type="textarea"
-                v-model="form.remarks"
-                placeholder="请输入备注"
-               
-                @input="form.remarks = form.remarks.toUpperCase()"
-                style="width:100%"
-                maxlength="500"
-                show-word-limit
-              ></el-input>
-            </el-form-item>
-          </el-col>
-        </el-row>
+          <!-- </el-col>        -->
+
        
        </el-col>
-       <el-col :span="8" :offset="1" style="height:100%">
+       <el-col :span="8" :offset="1" >
 
         
        <el-row style="padding:10px">
-          <div style="padding-bottom:10px">附件信息</div>
-            <el-col :span="6" style="padding-left:10px">
-                 <el-button type="primary" @click="onBatchDelete()" :loading="delbtnLoading" size="small">批量删除</el-button>
+         
+          <div style="padding-bottom:10px" ></div>
+           <el-col :span="8" style="padding-top: 10px;" >   
+             <span class="captitle">附件信息</span>
+             </el-col>         
+            <el-col :span="5">
+                 <el-button type="primary" @click="onBatchDelete()"
+                 style="width:100px;padding:8px;background-color:#f32929 !important;"
+                  :loading="delbtnLoading" size="small">批量删除</el-button>
           
              </el-col>
-           <el-col :span="18">
+           <el-col :span="10">
                 <el-upload
                 class="upload-demo"
                 action="/DBService/api/services/app/Attachment/AnnexUploaFile"
@@ -335,7 +342,7 @@
                 :http-request="httpRequest"
                 :multiple="true"
                 :show-file-list="true">
-                <el-button slot="trigger" size="small" type="primary">选取附件</el-button>
+                <el-button slot="trigger" size="small" style="width:100px;padding:8px" type="primary">选取附件</el-button>
                 <el-button style="margin-left: 10px;" size="small" type="success" @click="submitUpload">上传附件</el-button>
               </el-upload>
           
@@ -354,7 +361,7 @@
                 stripe
                 highlight-current-row
                 fit
-                height="300px"
+                height="280px"
                 style="width: 100%"
                 ref="table"
               >
@@ -413,7 +420,7 @@
       </el-form>
       <span slot="footer" class="dialog-footer">
         <el-button @click="windowShow = false" size="small">取 消</el-button>
-        <el-button type="primary" @click="save()" :loading="btnLoading" size="small">确 定</el-button>
+        <el-button type="primary" @click="save()" :loading="btnLoading" size="small">确认发布</el-button>
       </span>
     </el-dialog>
   </div>
@@ -422,7 +429,7 @@
 import { getDicListByDitType } from "api/publicBase/dictionaryMng";
 
 import {ZKDelInfoAddEdit,GetZKDelInfoSingle,GetBoxDetail} from "api/InformationDelivery/ZK";
-import { GetSiteList,GetLineList } from "api/publicBase/Combox";
+import { GetSiteList,GetLineList,GetLineSiteList } from "api/publicBase/Combox";
 import { pickerRangeOptions } from "consts/common";
 import { parseTime } from "utils";
 import { GetUploaFile,GetUPFile,BathDeltefile } from "api/publicBase/Attachment";
@@ -449,7 +456,7 @@ export default {
           id: "",
           billNO: "", 
           startStation: "", 
-          endStation: "", 
+          endStation: [],
           // effectiveSTime: "", 
           // effectiveETime: "",
           hopePrice: 0,
@@ -469,8 +476,8 @@ export default {
             remarks:  ""
           }],
         };
-        this.lineList=[];
-       
+        this.linesiteList=[];
+        this.fileList=[];
         this.$emit("on-show-change", newValue);
       }
     }
@@ -485,7 +492,7 @@ export default {
         id: "",
         billNO: "", 
         startStation: "", 
-        endStation: "", 
+        endStation:[], 
         // effectiveSTime: "", 
         // effectiveETime: "",
         hopePrice: 0,
@@ -494,6 +501,7 @@ export default {
         remarks: "", //备注
         submitDateRange:[],
         fileList:[],
+       
          boxDetails:[{
             id: "",
             boxTenantInfo:  "",
@@ -507,6 +515,7 @@ export default {
       },
       flag: true,
       siteList: [],
+      linesiteList: [],
       lineList: [],
       boxList: [],
       sizeList: [],
@@ -515,7 +524,8 @@ export default {
       rules: {
         //billNO: [{ required: true, message: "请选择船公司" }],
         startStation: [{ required: true, message: "请选择起运地" ,trigger: "change"}],
-        endStation: [{ required: true, message: "请选择目的站" ,trigger: "change"}],
+        // endStation: [{ required: true, message: "请选择目的站" ,trigger: "change"}],
+        line: [{ required: true, message: "请选择航线" ,trigger: "change"}],
         submitDateRange: [
         { required: true, message: '请选择有效时间'},
         {validator: this.validatetime},
@@ -581,12 +591,27 @@ export default {
       });
     },
       //获取航线
-    getlineList(line) {
-      this.form.line=line;
-      GetLineList({Code:this.form.endStation,IsEnable:true}).then(res => {
+    getlineList() {
+      GetLineList({IsEnable:true}).then(res => {
         this.lineList = res.result;
       
       });
+    },
+     //获取航线站点
+    getlinesiteList(endStation) {
+      this.form.endStation=[];
+      this.linesiteList=[];
+      if(this.form.line)
+      {
+         GetLineSiteList({line:this.form.line,IsEnable:true}).then(res => {
+          this.linesiteList = res.result;     
+        });
+        if(endStation !=='' && endStation!==null && endStation!==undefined)
+        {
+            this.form.endStation=endStation.split(',');
+        }  
+      }
+     
     },
     //根据Id信息
     GetZKDelInfoSingle(id) {
@@ -594,11 +619,13 @@ export default {
       GetZKDelInfoSingle({ id: id })
         .then(res => {
           this.form = res.result;
+           this.form.line = res.result.line.toString();
          var submitDateRange=[];
         
         submitDateRange.push(res.result.effectiveSTime);
         submitDateRange.push(res.result.effectiveETime);
-        this.$set(this.form, 'submitDateRange', submitDateRange)
+        this.$set(this.form, 'submitDateRange', submitDateRange);
+        this.getlinesiteList(res.result.endStation);
         //this.form.submitDateRange=submitDateRange;
           this.formLoading = false;
         })
@@ -631,7 +658,7 @@ export default {
               id: this.form.id,
               billNO: this.form.billNO, 
               startStation: this.form.startStation, 
-              endStation: this.form.endStation, 
+              endStation: this.form.endStation,  
              
               hopePrice: this.form.hopePrice,
               line: this.form.line,
@@ -658,16 +685,8 @@ export default {
             msg
           )
             .then(res => {
-              this.btnLoading = false;
-              // if(!this.form.id){
-              //        this.form.id=res.result.id;
-              //        this.form.billNO=res.result.billNO;
-              //   }
-              this.GetZKDelInfoSingle(res.result.id);
-              // if (this.flag) {
-              //   this.windowShow = false;
-              // }
-              // this.$emit("on-save-success");
+              this.btnLoading = false;           
+              this.GetZKDelInfoSingle(res.result.id);         
             })
             .catch(err => {
               this.btnLoading = false;
@@ -793,3 +812,18 @@ export default {
   }
 };
 </script>
+<style  lang="scss">
+.addzkset{
+  .el-dialog__title{
+      font-weight: 700;
+      font-style: normal;
+      color: rgb(6, 88, 185);
+      font-size: 18px;
+  }
+  .captitle{
+      
+       font-weight: 700;   
+      font-size: 16px;
+  }
+}
+</style>

@@ -107,8 +107,7 @@ const user = {
             commit('SET_MENUS', undefined);
             commit('SET_ELEMENTS', undefined);
             //removeToken();
-            setCookie('AbpAuthToken',res.result.accessToken);
-                         
+            setCookie('AbpAuthToken',res.result.accessToken);                        
            // setCookie(" Abp.TenantId", res.result.userId, 360);
          
             commit('SET_TOKEN', res.result.accessToken);
@@ -143,7 +142,7 @@ const user = {
       state
     }) {
       return new Promise((resolve, reject) => {
-        let data={id: getCookie('Abp.UserId')};
+        let data={id: getCookie('AbpUserId')};
         getInfo(data).then(res => {     
           //localStorage.setItem("permission",JSON.stringify(Object.keys(data.result.auth.grantedPermissions)));
           commit('SET_NAME', res.result.name);
@@ -221,8 +220,11 @@ const user = {
         //清除用户cookie
         //removeToken();
         
-        delCookie('Abp.AuthToken')
-        delCookie('Abp.TenantId')
+        delCookie('AbpAuthToken')
+        delCookie('AbpTenantId');
+        delCookie('AbpUserId');
+        delCookie('ABPName');
+        delCookie('AbpCompanyType')
         //console.log('bbb',getCookie('Abp.AuthToken'))
         //clearAllCookie()
 

@@ -154,9 +154,10 @@
                
                // setCookie("Abp.SystemUser", res.result.systemUser, 360);
                this.windowShow=false;
-               this.$router.push({
-                  path: '/dashboard'
-                });
+               this.$emit("on-save-success");
+              //  this.$router.push({
+              //     path: '/dashboard'
+              //   });
                 
               } else {
                 this.loading = false;

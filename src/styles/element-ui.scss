@@ -172,7 +172,11 @@
 
 // .el-table td, .el-table th.is-leaf{border-bottom: none;}
 .el-table thead{ text-align: center;}
-.el-table th{background: #e1e4eb;}
+// .el-table th{background: #e1e4eb;}
+.el-table th{
+  background: #4e74cd;
+  color: #ffff;
+  font-size :14px;}
 .el-switch{margin-left:10px;}
 
 
@@ -200,7 +204,9 @@
     &:nth-child(4) {
       margin-top: 10px;
     }
+    
   }
+  
 }
 
 .el-upload {
@@ -279,3 +285,14 @@
 
 .el-table .row-background-black{background-color: #000 !important;padding:2px}
 
+.el-button--primary {
+  background-color: #0658B8 !important;
+  //padding: 15px;
+  border-color: #0658B8 !important;
+}
+.el-input__inner{
+  height: 40px!important;
+}
+.el-form-item--mini .el-form-item__content, .el-form-item--mini .el-form-item__label {
+  line-height: 40px!important;
+}

@@ -124,7 +124,7 @@ export const asyncRouterMap = [
     },
     children: [
       {
-        path: '/XDDelInfo',
+        path: 'XDDelInfo',
         component: () => import('@/views/InformationDelivery/XD/XDDelInfoIndex').then(m => m.default),
         name: 'XDDelInfoIndex',
         meta: {
@@ -311,6 +311,17 @@ export const asyncRouterMap = [
           iswhite:true
         },
        
+      },
+      {
+        path: 'DelivInfoDetail',
+        component: () => import('@/views/InteRecommend/DelivInfoDetailIndex').then(m => m.default),
+        name: 'DelivInfoDetailIndex',
+        hidden: true,
+        meta: {
+          title: '打印收费联系单',
+          keepAlive: true,
+          roles: ['root.qt.hd']
+        }
       },
              
     ]

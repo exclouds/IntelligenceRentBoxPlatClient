@@ -1,5 +1,5 @@
 <template>
-  <div class="showclass">
+  <div class="addxdset">
     <el-dialog
       :title="form.id==''?'新增箱东信息发布':'编辑箱东信息发布'"
       v-dialogDrag
@@ -14,15 +14,11 @@
         ref="ruleForm"
         :rules="rules"
         v-loading="formLoading"
-        label-width="120px"
+        label-width="100px"
       >
-    <el-row style="height:100%">
-     <el-col :span="15" >
-   
-    
-        <el-row>
+      <el-row>
 
-          <el-col :span="8">
+          <el-col :span="4">
             <el-form-item label="单号：" prop="billNO">
                <el-input placeholder="单号"    style="width:100%;" 
                disabled
@@ -32,7 +28,7 @@
              
             </el-form-item>
           </el-col>
-          <el-col :span="8">
+          <el-col :span="4">
             <el-form-item label="起运站：" prop="startStation">
               <el-select
               v-model="form.startStation"
@@ -52,26 +48,7 @@
           </el-col>
         <!-- </el-row>
         <el-row> -->
-          <el-col :span="8">
-            <el-form-item label="目的站：" prop="endStation">
-               <el-select
-              v-model="form.endStation"
-              placeholder="目的站"
-              style="width:99%"
-              clearable
-              filterable
-              @change="getlineList('')" 
-            >
-              <el-option
-                v-for="item in siteList"
-                :key="item.value"
-                :label="item.displayText"
-                :value="item.value"
-              ></el-option>
-            </el-select>
-            </el-form-item>
-          </el-col>
-           <el-col :span="8">
+        <el-col :span="4">
             <el-form-item label="所属路线：" prop="line">
               <el-select
                 v-model="form.line"
@@ -79,6 +56,7 @@
                 style="width:100%"
                 clearable
                 filterable
+                @change="getlinesiteList('')" 
               >
                <el-option
                 v-for="item in lineList"
@@ -89,7 +67,27 @@
               </el-select>
             </el-form-item>
           </el-col>
-            <el-col :span="8">
+          <el-col :span="6">
+            <el-form-item label="目的站：" prop="endStation">
+               <el-select
+              v-model="form.endStation"
+              placeholder="目的站"
+              style="width:99%"
+              clearable
+              filterable
+              multiple
+              collapse-tags
+            >
+              <el-option
+                v-for="item in linesiteList"
+                :key="item.value"
+                :label="item.displayText"
+                :value="item.value"
+              ></el-option>
+            </el-select>
+            </el-form-item>
+          </el-col>
+            <el-col :span="4">
             <el-form-item label="还箱地：" prop="returnStation">
               <el-select
                 v-model="form.returnStation"
@@ -107,8 +105,8 @@
               </el-select>
             </el-form-item>
           </el-col>
-           <el-col :span="8">
-            <el-form-item label="租金：" prop="sellingPrice">
+           <el-col :span="4">
+            <el-form-item label="租金：" prop="sellingPrice" >
                 <el-input-number
                     placeholder="租金"
                     v-model="form.sellingPrice"
@@ -119,7 +117,7 @@
                     ></el-input-number>
             </el-form-item>
             </el-col>
-             <el-col :span="8">
+             <!-- <el-col :span="4">
             <el-form-item label="预计到站时间：" prop="predictTime">
               <el-date-picker
                 v-model="form.predictTime"
@@ -128,8 +126,8 @@
                 style="width:100%"
               ></el-date-picker>  
             </el-form-item>
-          </el-col>
-          <el-col :span="8">
+          </el-col> -->
+          <!-- <el-col :span="4">
             <el-form-item label="是否库存：" >
              <el-select
               v-model="form.isInStock"
@@ -141,8 +139,8 @@
               <el-option label="否" :value="false"></el-option>
             </el-select>
             </el-form-item>
-          </el-col>
-          <el-col :span="8">
+          </el-col> -->
+          <el-col :span="4">
             <el-form-item label="是否启用：" >
              <el-select
               v-model="form.isEnable"
@@ -157,7 +155,7 @@
           </el-col>
         <!-- </el-row>       
          <el-row> -->
-          <el-col :span="12">
+          <el-col :span="10">
             <el-form-item label="有效时间：" prop="submitDateRange">
               <el-date-picker
                 v-model="form.submitDateRange"
@@ -173,17 +171,32 @@
               ></el-date-picker>  
             </el-form-item>
           </el-col>
-          
-        </el-row>
-          <el-row>
-           <el-form-item label="集装箱信息：" prop="boxDetails">
-             <el-button   @click="addItem" type="primary">增加</el-button>
-           </el-form-item>
-          </el-row>
-         
-           <el-row>
-          
-          <el-col :span="23" :offset="1">
+            <el-col :span="24" >
+            <el-form-item label="备注：" prop="remarks">
+              <el-input
+                type="textarea"
+                v-model="form.remarks"
+                placeholder="请输入备注"
+               
+                @input="form.remarks = form.remarks.toUpperCase()"
+                style="width:100%"
+                maxlength="500"
+                show-word-limit
+              ></el-input>
+            </el-form-item>
+          </el-col>
+     </el-row>
+          <el-divider></el-divider>
+    <el-row style="height:100%">
+     <el-col :span="15" style="padding-left:30px">
+        
+          <div style="padding-bottom:40px">   
+           <el-col :span="21" style="padding-top: 10px;" >   <span class="captitle">集装箱信息：</span></el-col>
+            <el-col :span="2"  >     
+              <el-button style="width:100px;padding:8px"  @click="addItem" type="primary">增加</el-button>
+              </el-col>
+          </div>  
+               
               <el-table
               :cell-class-name="tableRowClassName"           
                 :data="form.boxDetails"
@@ -192,7 +205,7 @@
                 stripe
                 highlight-current-row
                 fit
-                height="260px"
+                height="310px"
                 style="width:100%"
                 ref="table1"
               >
@@ -341,37 +354,20 @@
                     </template>
                   </el-table-column>
               </el-table>
-        
-          </el-col>
-           <!-- </el-row>
-      <el-row> -->
-          <el-col :span="24" style="padding-top:20px">
-            <el-form-item label="备注：" prop="remarks">
-              <el-input
-                type="textarea"
-                v-model="form.remarks"
-                placeholder="请输入备注"
-               
-                @input="form.remarks = form.remarks.toUpperCase()"
-                style="width:100%"
-                maxlength="500"
-                show-word-limit
-              ></el-input>
-            </el-form-item>
-          </el-col>
-        </el-row>
            
      </el-col>
-      <el-col :span="8" :offset="1" style="height:100%">
-
-        
+      <el-col :span="8" :offset="1" style="height:100%">      
        <el-row style="padding:10px">
-          <div style="padding-bottom:10px">附件信息</div>
-            <el-col :span="6" style="padding-left:10px">
-                 <el-button type="primary" @click="onBatchDelete()" :loading="delbtnLoading" size="small">批量删除</el-button>
+          <el-col :span="8" style="padding-top: 10px;" >   
+             <span class="captitle">附件信息</span>
+             </el-col>         
+            <el-col :span="5">
+                 <el-button type="primary" @click="onBatchDelete()"
+                 style="width:100px;padding:8px;background-color:#f32929 !important;"
+                  :loading="delbtnLoading" size="small">批量删除</el-button>
           
              </el-col>
-           <el-col :span="18">
+           <el-col :span="10">
                 <el-upload
                 class="upload-demo"
                 action="/DBService/api/services/app/Attachment/AnnexUploaFile"
@@ -458,7 +454,7 @@
     </el-form>
       <span slot="footer" class="dialog-footer">
         <el-button @click="windowShow = false" size="small">取 消</el-button>
-        <el-button type="primary" @click="save()" :loading="btnLoading" size="small">确 定</el-button>
+        <el-button type="primary" @click="save()" :loading="btnLoading" size="small">确认发布</el-button>
       </span>
     </el-dialog>
   </div>
@@ -467,7 +463,7 @@
 import { getDicListByDitType } from "api/publicBase/dictionaryMng";
 import { tableMixin } from "mixin/commTable";
 import {XDDelInfoAddEdit,GetXDDelInfoSingle} from "api/InformationDelivery/XD";
-import { GetSiteList,GetLineList } from "api/publicBase/Combox";
+import { GetSiteList,GetLineList,GetLineSiteList } from "api/publicBase/Combox";
 import { pickerRangeOptions } from "consts/common";
 import { parseTime } from "utils";
 import upload from "components/upload/upload";
@@ -498,16 +494,16 @@ export default {
           id: "",
           billNO: "", 
           startStation: "", 
-          endStation: "", 
+          endStation: [], 
           returnStation: "", 
           // effectiveETime: "",
           hopePrice: 0,
           line: "",
           isEnable:true,
-          isInStock:true,
+         // isInStock:true,
           remarks: "", //备注
           submitDateRange:[],
-          predictTime:undefined,
+         // predictTime:undefined,
           sellingPrice:0,
           boxDetails:[{
             id: "",
@@ -522,8 +518,10 @@ export default {
          
         };
         this.lineList=[];
-         this.filelist=[];
-         this.filecontent=[];
+        this.filelist=[];
+        this.filecontent=[];
+        this.linesiteList=[];
+       
         this.$emit("on-show-change", newValue);
       }
     }
@@ -539,17 +537,17 @@ export default {
         id: "",
         billNO: "", 
         startStation: "", 
-        endStation: "", 
+        endStation:[],
         returnStation: "", 
         // effectiveSTime: "", 
         // effectiveETime: "",
         hopePrice: 0,
         line: "",
         isEnable:true,
-        isInStock:true,
+       // isInStock:true,
         remarks: "", //备注
         submitDateRange:[],
-        predictTime:undefined,
+        //predictTime:undefined,
         sellingPrice:0,
         boxDetails:[{
           id: "",
@@ -567,14 +565,16 @@ export default {
       flag: true,
       siteList: [],
       lineList: [],
+      linesiteList: [],
       boxList: [],
       sizeList: [],
-     filecontent:[],
+      filecontent:[],
       //定义字段校验规则
       rules: {
         //billNO: [{ required: true, message: "请选择船公司" }],
         startStation: [{ required: true, message: "请选择起运地" ,trigger: "change"}],
-        endStation: [{ required: true, message: "请选择目的站" ,trigger: "change"}],
+        //endStation: [{ required: true, message: "请选择目的站" ,trigger: "change"}],
+         line: [{ required: true, message: "请选择航线" ,trigger: "change"}],
         returnStation: [{ required: true, message: "请选择还箱地" ,trigger: "change"}],
         submitDateRange: [
         { required: true, message: '请选择有效时间'},
@@ -624,19 +624,36 @@ export default {
           }
             
         },
+ 
    //获取站点
     getsiteList() {
       GetSiteList({IsEnable:true}).then(res => {
         this.siteList = res.result;
       });
     },
-      //获取航线
-    getlineList(line) {
-      this.form.line=line;
-      GetLineList({Code:this.form.endStation,IsEnable:true}).then(res => {
+        //获取航线
+    getlineList() {
+      GetLineList({IsEnable:true}).then(res => {
         this.lineList = res.result;
       
       });
+    },
+     //获取航线站点
+    getlinesiteList(endStation) {
+      this.form.endStation=[];
+      this.linesiteList=[];
+      if(this.form.line)
+      {
+         GetLineSiteList({line:this.form.line,IsEnable:true}).then(res => {
+          this.linesiteList = res.result;     
+        });
+        if(endStation !=='' && endStation!==null && endStation!==undefined)
+        {
+            this.form.endStation=endStation.split(',');
+        }  
+      }
+        
+     
     }, 
     //箱型
     getxxlist() {
@@ -658,6 +675,7 @@ export default {
       GetXDDelInfoSingle({ id: id })
         .then(res => {
           this.form = res.result.boxInfo;
+          this.form.line = res.result.boxInfo.line.toString();
         
          var submitDateRange=[];
         
@@ -666,6 +684,7 @@ export default {
         this.$set(this.form, 'submitDateRange', submitDateRange);
         this.form.boxDetails=res.result.boxDetails;
          this.filelist=res.result.fileList;
+           this.getlinesiteList(res.result.boxInfo.endStation);
         //this.form.submitDateRange=submitDateRange;
           this.formLoading = false;
         })
@@ -714,7 +733,8 @@ export default {
               // data.settlenTimeend = null;
               warnMsg("请选择有效时间");
               return;
-            }
+            };
+            
           XDDelInfoAddEdit(
             data,
             msg
@@ -839,13 +859,18 @@ export default {
 };
 </script>
 
-<style lang="scss">
-.showclass {
-  .el-dialog{
-    height: 750px;
+<style  lang="scss">
+.addxdset{
+  .el-dialog__title{
+      font-weight: 700;
+      font-style: normal;
+      color: rgb(6, 88, 185);
+      font-size: 18px;
   }
-  .el-dialog__wrapper {
-   height:100% !important;
+  .captitle{
+      
+       font-weight: 700;   
+      font-size: 16px;
   }
 }
 </style>

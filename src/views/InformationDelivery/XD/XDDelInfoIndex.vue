@@ -1,8 +1,8 @@
 <template>
-  <div class="app-container">
+  <div class="app-container xdinfodel">
     <el-form size="mini" label-width="100px" @submist.native.prevent class="ctntype">
-      <el-row style="margin-bottom:10px;">
-        <el-col :span="5">
+      <el-row>
+        <el-col :span="4">
           <el-form-item label="单号：" prop>
            <el-input placeholder="单号"    style="width:100%;" 
               v-model="search.BillNO"  size="mini" clearable 
@@ -28,7 +28,25 @@
             </el-select>
           </el-form-item>
         </el-col>
-        <el-col :span="4">
+        <el-col :span="3">
+          <el-form-item label="航线：" prop label-width="80px">
+            <el-select
+              v-model="search.line"
+              placeholder="航线"
+              style="width:100%"
+              clearable
+              filterable
+            >
+              <el-option
+                v-for="item in lineList"
+                :key="item.value"
+                :label="item.displayText"
+                :value="item.value"
+              ></el-option>
+            </el-select>
+          </el-form-item>
+        </el-col>
+        <!-- <el-col :span="4">
           <el-form-item label="目的站：" prop>
             <el-select
               v-model="search.EndStation"
@@ -45,7 +63,7 @@
               ></el-option>
             </el-select>
           </el-form-item>
-        </el-col>
+        </el-col> -->
         <el-col :span="4">
           <el-form-item label="还箱地：" prop>
             <el-select
@@ -65,7 +83,7 @@
           </el-form-item>
         </el-col>
         
-         <el-col :span="4">
+         <!-- <el-col :span="4">
             <el-form-item label="是否库存：" >
              <el-select
               v-model="search.IsInStock"
@@ -77,7 +95,7 @@
               <el-option label="否" :value="false"></el-option>
             </el-select>
             </el-form-item>
-          </el-col>
+          </el-col> -->
         <el-col :span="4">
             <el-form-item label="是否启用：" >
              <el-select
@@ -97,7 +115,8 @@
               v-model="search.IsVerify"
               placeholder="是否审核"
               clearable
-              filterable          
+              filterable   
+               style="width:100%"       
             >
               <el-option label="是" :value="true"></el-option>
               <el-option label="否" :value="false"></el-option>
@@ -110,7 +129,8 @@
               v-model="search.Finish"
               placeholder="是否完成"
               clearable
-              filterable          
+              filterable    
+               style="width:100%"           
             >
               <el-option label="是" :value="true"></el-option>
               <el-option label="否" :value="false"></el-option>
@@ -119,17 +139,21 @@
           </el-col>
         <el-col :span="10">
           <el-form-item label prop label-width="15px">
-            <el-button type="primary" size="mini" @click="onSearchBefore();getTableList()">搜索</el-button>
-            <el-button type="primary" size="mini" @click="createOrEdit()">新增</el-button>
-            <el-button type="primary" size="mini" @click="onBatchDelete()">批量删除</el-button>
-             <el-button type="primary" size="mini" @click="BatchOPEN(true)" :loading="btnloading">批量启用</el-button>
-             <el-button type="primary" size="mini" @click="BatchOPEN(false)" :loading="btnloading">批量停用</el-button>
+            <el-button type="primary" style="width:100px;font-size:16px" size="mini" @click="onSearchBefore();getTableList()">搜索</el-button>
+           
           </el-form-item>
         </el-col>
       </el-row>
     </el-form>
-    <el-row style="height:calc(100% - 130px)">
-      <el-table
+    <el-card  class="cardset">
+      <div class="btnrow">
+         <el-button class="btn1" type="primary" size="mini" @click="createOrEdit()">新增</el-button>
+            <el-button  class="btn2" type="primary" size="mini" @click="onBatchDelete()">批量删除</el-button>
+             <el-button  class="btn2" type="primary" size="mini" @click="BatchOPEN(true)" :loading="btnloading">批量启用</el-button>
+             <el-button   class="btn2" type="primary" size="mini" @click="BatchOPEN(false)" :loading="btnloading">批量停用</el-button>
+      </div>
+     <div style="height:78%">
+       <el-table
         :data="table.data"
         :cell-class-name="tableRowClassName"
         :row-key="getRowKeys"
@@ -166,11 +190,20 @@
           sortable="custom"
           show-overflow-tooltip
         ></el-table-column>
-        <el-table-column
+       
+         <el-table-column
+          align="center"
+          prop="line"
+          label="所属路线"
+          width="120px"
+          sortable="custom"
+          show-overflow-tooltip
+        ></el-table-column>
+         <el-table-column
           align="center"
           prop="endStation"
           label="目的站"
-          width="120px"
+          width="160px"
           sortable="custom"
           show-overflow-tooltip
         ></el-table-column>
@@ -184,14 +217,6 @@
         ></el-table-column>
          <el-table-column
           align="center"
-          prop="line"
-          label="所属路线"
-          width="120px"
-          sortable="custom"
-          show-overflow-tooltip
-        ></el-table-column>
-         <el-table-column
-          align="center"
           prop="xxcc"
           label="箱型尺寸"
           width="120px"
@@ -199,11 +224,11 @@
           show-overflow-tooltip
         ></el-table-column>
         
-         <el-table-column
+         <!-- <el-table-column
           align="center"
           prop="isInStock"
           label="是否库存"
-           width="100px"
+           width="120px"
           sortable="custom"
           show-overflow-tooltip
         >
@@ -216,14 +241,14 @@
           align="center"
           prop="predictTime"
           label="预计到站时间"
-          width="120px"
+          width="130px"
           sortable="custom"
           show-overflow-tooltip
         >
             <template slot-scope="scope">{{
               scope.row.predictTime | parseTime('{y}-{m}-{d}')
             }}</template>
-        </el-table-column>
+        </el-table-column> -->
         <el-table-column
           align="center"
           prop="effectiveSTime"
@@ -264,7 +289,7 @@
           align="center"
           prop="finish"
           label="是否完成"
-           width="100px"
+           width="120px"
           sortable="custom"
           show-overflow-tooltip
         >
@@ -277,7 +302,7 @@
           align="center"
           prop="isEnable"
           label="是否启用"
-          width="100px"
+          width="120px"
           sortable="custom"
           show-overflow-tooltip
         >
@@ -289,7 +314,7 @@
           align="center"
           prop="isVerify"
           label="是否审核"
-           width="100px"
+           width="120px"
           sortable="custom"
           show-overflow-tooltip
         >
@@ -333,6 +358,8 @@
                 </div>
             <div class="tableBtn" @click="createOrEdit(scope.row.id)"
             v-if="scope.row.isVerify  !==true && scope.row.finish  !==true">编辑</div>
+             <!-- <div class="tableBtn" @click="createOrEdit(scope.row.id)"
+           >编辑</div> -->
             <div class="tableBtn" @click="deletecdelinfo(scope.row.id)"
              v-if="scope.row.isVerify  !==true && scope.row.finish  !==true">删除</div>
             
@@ -340,7 +367,7 @@
         </el-table-column>
       </el-table>
       <el-pagination
-        style="margin-top:10px;"
+        style="margin-top:10px;margin-left:20px;"
         @size-change="handleSizeChange"
         @current-change="handleCurrentChange"
         :current-page="page.currentPage"
@@ -349,7 +376,10 @@
         :page-sizes="page.pageSelectArr"
         layout="total, sizes, prev, pager, next, jumper"
       ></el-pagination>
-    </el-row>
+     </div>
+    </el-card>
+      
+   
     <creat-XDDelInfo
       ref="creatXDDelInfoComp"
       :pshow="creatXDDelInfoComp.show"
@@ -386,6 +416,7 @@ export default {
       search: {
         BillNO: "",
         StartStation: "",
+        line: "",
         EndStation: "",
         ReturnStation: "",
         IsEnable: undefined,
@@ -450,6 +481,8 @@ export default {
        this.$refs.creatXDDelInfoComp.getsiteList();
        this.$refs.creatXDDelInfoComp.getcclist();
        this.$refs.creatXDDelInfoComp.getxxlist();
+       this.$refs.creatXDDelInfoComp.getlineList();
+       
       if (id) {
        
         this.$refs.creatXDDelInfoComp.GetXDDelInfoSingle(id);
@@ -542,20 +575,40 @@ export default {
   created() {
  
     this.getsiteList();
+    this.getlineList();
    
   }
 };
 </script>
 
+
 <style lang="scss">
-.ctntype {
-  .item1 {
-    .el-form-item__label {
-      width: 65px !important;
-    }
-    .el-form-item__content {
-      margin-left: 68px !important;
-    }
+.xdinfodel {
+  .cardset{
+    height:calc(100% - 110px);
+    margin-left: 20px;
+    margin-right: 20px;
+   
   }
+  .el-card__body{
+    height: 100%;
+    padding: 0px !important;
+    }
+  .btnrow { 
+    background-color:rgb(240, 248, 253);;
+   padding:20px ;
+  // padding-left:20px ;
+  }
+  .btn1{
+    font-size: 16px;
+    width: 80px;
+  }
+   .btn2{
+    font-size: 16px;
+    width: 120px;
+  }
+  .el-table th{
+    background: #e1e4eb !important;
+    color:black!important;}
 }
 </style>

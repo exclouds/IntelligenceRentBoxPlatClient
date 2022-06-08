@@ -36,7 +36,25 @@ export function GetLineList(obj) {
    
   });
 }
+//获取箱型尺寸
+export function GetXXCCList(obj) {
+  return fetch({
+    url: '/DBService/api/services/app/PublicComboxAppSevrice/GetXXCCList',
+    method: 'get',
+    params:obj
+   
+  });
+}
 
+//获取航线路线下拉
+export function GetLineSiteList(obj) {
+  return fetch({
+    url: '/DBService/api/services/app/PublicComboxAppSevrice/GetLineSiteList',
+    method: 'get',
+    params:obj
+   
+  });
+}
 
 
 

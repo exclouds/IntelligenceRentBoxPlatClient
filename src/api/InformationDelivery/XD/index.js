@@ -4,9 +4,9 @@ import fetch from 'utils/fetch';
 //查询
 export function GetXDDelInfoList(obj) {
   return fetch({
-    url: '/DBService/api/services/app/XDInforDelivery/GetXDDelInfoList',
-    method: 'get',
-    params:obj
+    url: '/DBService/api/services/app/XDInforDelivery/PostXDDelInfoList',
+    method: 'post',
+    data:obj
   });
 }
 //获取单个信息

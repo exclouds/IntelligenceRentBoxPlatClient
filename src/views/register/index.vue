@@ -308,7 +308,7 @@ import {Message,MessageBox} from 'element-ui';
       },
       // 用户注册
       onSubmitRigisterGr() {
-          this.$refs["registerForm"].validate(valid => {
+          this.$refs["registerGrForm"].validate(valid => {
              if (valid) {
                 this.loading = true;;
                 let data =this.registerGrForm;       

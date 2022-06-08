@@ -4,9 +4,9 @@ import fetch from 'utils/fetch';
 //查询
 export function GetZKDelInfoList(obj) {
   return fetch({
-    url: '/DBService/api/services/app/ZKInforDelivery/GetZKDelInfoList',
-    method: 'get',
-    params:obj
+    url: '/DBService/api/services/app/ZKInforDelivery/PostZKDelInfoList',
+    method: 'post',
+    data:obj
   });
 }
 //获取单个信息
