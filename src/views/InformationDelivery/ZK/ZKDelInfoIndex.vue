@@ -12,20 +12,17 @@
         </el-col>
         <el-col :span="3">
           <el-form-item label="起运站：" prop label-width="90px">
-            <el-select
-              v-model="search.StartStation"
+            <big-data-select             
+              :val.sync="search.StartStation"
               placeholder="起运站"
-              style="width:100%"
+              style="width: 100%"
+              size="mini"
               clearable
-              filterable
-            >
-              <el-option
-                v-for="item in siteList"
-                :key="item.value"
-                :label="item.displayText"
-                :value="item.value"
-              ></el-option>
-            </el-select>
+              filterable                
+              :data="siteList"
+              optionkey="displayText"
+              optionValue="value"
+            ></big-data-select>
           </el-form-item>
         </el-col>
          <el-col :span="3">
@@ -124,7 +121,7 @@
              <el-button class="btn2" type="primary" size="mini" @click="BatchOPEN(true)" :loading="btnloading">批量启用</el-button>
              <el-button class="btn2" type="primary" size="mini" @click="BatchOPEN(false)" :loading="btnloading">批量停用</el-button>
       </div>
-     <div style="height:78%">
+     <div style="height:79%">
      <el-table
         :data="table.data"
         :cell-class-name="tableRowClassName"
@@ -162,18 +159,19 @@
           sortable="custom"
           show-overflow-tooltip
         ></el-table-column>
-        <el-table-column
+       
+         <el-table-column
           align="center"
-          prop="endStation"
-          label="目的站"
+          prop="line"
+          label="所属路线"
           width="120px"
           sortable="custom"
           show-overflow-tooltip
         ></el-table-column>
          <el-table-column
           align="center"
-          prop="line"
-          label="所属路线"
+          prop="endStation"
+          label="目的站"
           width="120px"
           sortable="custom"
           show-overflow-tooltip
@@ -311,7 +309,8 @@
         </el-table-column>
       </el-table>
     <el-pagination
-        style="margin-top:10px;margin-left:20px;"
+        style="margin-top:10px;"
+        align="center" 
         @size-change="handleSizeChange"
         @current-change="handleCurrentChange"
         :current-page="page.currentPage"
@@ -526,7 +525,7 @@ export default {
 <style lang="scss">
 .zkinfodel {
   .cardset{
-    height:calc(100% - 80px);
+    height:calc(100% - 60px);
     margin-left: 20px;
     margin-right: 20px;
    

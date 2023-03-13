@@ -22,36 +22,30 @@
               </tr>
               <tr>
                 <td>
-                  <el-select
-                    v-model="search.StartStation"
-                    placeholder="起运站"
-                    style="width:90%"
-                    clearable
-                    filterable
-                  >
-                    <el-option
-                      v-for="item in siteList"
-                      :key="item.value"
-                      :label="item.displayText"
-                      :value="item.value"
-                    ></el-option>
-                  </el-select>
+                 <big-data-select             
+                      :val.sync="search.StartStation"
+                      placeholder="起运站"
+                      style="width: 95%"
+                      size="mini"
+                      clearable
+                      filterable                
+                      :data="siteList"
+                      optionkey="displayText"
+                      optionValue="value"
+                    ></big-data-select>
                 </td>
                 <td>
-                  <el-select
-                    v-model="search.EndStation"
-                    placeholder="目的站"
-                    style="width:90%"
-                    clearable
-                    filterable
-                  >
-                     <el-option
-                      v-for="item in siteList"
-                      :key="item.value"
-                      :label="item.displayText"
-                      :value="item.value"
-                    ></el-option>
-                  </el-select>
+                   <big-data-select             
+                      :val.sync="search.EndStation"
+                      placeholder="目的站"
+                      style="width: 95%"
+                      size="mini"
+                      clearable
+                      filterable                
+                      :data="siteList"
+                      optionkey="displayText"
+                      optionValue="value"
+                    ></big-data-select>
                 </td>
                 <td id="xxclass">
                    <!-- <el-input placeholder="单号"    style="width:95%;" 
@@ -68,7 +62,30 @@
                     clearable
                                       
                   >
-                    <el-option
+                  <div  style="width:280px" v-for="item in boxList" :key="item.xxcc">
+                    <el-col :span="10">
+                       <el-option             
+                       :key="item.xxcc"
+                       :label="item.lable+'  *  '+item.qty.toString()"
+                       :value="item.xxcc+item.qty"
+                    ></el-option>
+                    </el-col>
+                     <el-col :span="12">
+                        <el-input-number
+                          placeholder="箱量"
+                          v-model="item.qty"
+                          controls-position="right"                                                            
+                          :step="1"
+                          clearable
+                          :min="0"
+                          style="width:100%;padding-left:20px;"
+                        
+                          ></el-input-number>
+                     </el-col>
+                   
+                    
+                  </div>
+                    <!-- <el-option
                       v-for="item in boxList"
                        :key="item.xxcc"
                       :label="item.lable+'*'+item.qty.toString()"
@@ -89,7 +106,7 @@
                           ></el-input-number>
                     
                    
-                    </el-option>  
+                    </el-option>   -->
                    </el-select>  
                 </div>
                 </td>
@@ -178,7 +195,9 @@
           >
           <el-card class="cardclass">
           <div class="title">
-            {{item.startStation+" 至 " +item.line+' 航线'}}</div>
+           <span  :style="'color:'+item.linecolor"> {{item.startStation+" 至 " +item.line+' 航线'}}
+            </span>
+           </div>
        
           <div>单号：{{item.billNO}}</div>
           <div>起运港：{{item.startStation}}</div>
@@ -264,7 +283,7 @@
 import {setCookie, getCookie, delCookie} from 'utils/cookie'
 import {GetIntelligRcommendList} from 'api/InteRecommend'
 import { GetSiteList,GetLineList,GetXXCCList } from "api/publicBase/Combox";
-
+import colorList from 'store/colorList';
 
 export default {
 
@@ -325,7 +344,14 @@ export default {
         .then(res => {
          
           if (res.success) {
-            this.datalist = res.result;        
+            this.datalist = res.result;
+             this.datalist.forEach(item=>{
+              //item.lineId
+              var ccindex=Number(item.lineID);                        
+              this.$set(item, "linecolor", colorList[ccindex]);
+              
+            })  
+                  
           }
         })
         .catch(()=>{});
@@ -399,7 +425,7 @@ export default {
   .title{
     font-weight: 400;
     font-size: 16px;
-    color: #0658B9;
+    //color: #0658B9;
   }
   .autocommond{
     padding-top:50px;
@@ -455,20 +481,20 @@ export default {
     height:40px;
     font-size: 16px;
   }
-  #xxclass{
-    .el-select .el-select-dropdown__item
-    {
-      width: 400px !important;
-      height: 54px !important;
-      line-height: 54px !important;
-    }
+  // #xxclass{
+  //   // .el-select .el-select-dropdown__item
+  //   // {
+  //   //   width: 400px !important;
+  //   //   height: 54px !important;
+  //   //   line-height: 54px !important;
+  //   // }
     
-  }
-  .showinput{
-    .el-input__inner {
-      height: 36px !important;
-    }
-  }
+  // }
+  // .showinput{
+  //   .el-input__inner {
+  //     height: 36px !important;
+  //   }
+  // }
 }
 
 .page-container{min-height: 100vh;}

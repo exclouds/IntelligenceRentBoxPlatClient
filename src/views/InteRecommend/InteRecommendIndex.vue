@@ -19,7 +19,10 @@
             >
             <el-card class="cardclass">
             <div class="title">
-              {{item.startStation+" 至  "+item.line+" 航线"}}</div>
+              <span  :style="'color:'+item.linecolor">
+                  {{item.startStation+" 至  "+item.line+" 航线"}}
+                  </span>
+                  </div>
         
             <div>单号：{{item.billNO}}    </div>
             <div>{{"起运港："+item.startStation}}    </div>
@@ -52,7 +55,7 @@ import { tableMixin } from "mixin/commTable";
 import { warnMsg } from "utils/messageBox";
 import {GetIntelligRcommendList} from 'api/InteRecommend'
 import { getCookie} from 'utils/cookie'
-
+import colorList from 'store/colorList';
 
 export default {
   name: "InteRecommendIndex",
@@ -83,7 +86,13 @@ export default {
         .then(res => {
          
           if (res.success) {
-            this.datalist = res.result;        
+            this.datalist = res.result;  
+            this.datalist.forEach(item=>{
+              //item.lineId
+              var ccindex=Number(item.lineID);                        
+              this.$set(item, "linecolor", colorList[ccindex]);
+              
+            })        
           }
         });
 

@@ -31,7 +31,7 @@
 			</div>
 
              
-	    	<div align="center" class="lastclass">{{'Copyright 2021-'+(new Date()).getFullYear()+' 拼箱平台'}}</div>							        
+	    	<div align="center" class="lastclass">{{'Copyright 2021-'+(new Date()).getFullYear()+' 拼箱平台（为了得到最佳浏览效果请尽量使用Chorm（谷歌）浏览器）'}}</div>							        
 			<!-- </div>			 -->
 			</el-footer>
 		</el-container>	 

@@ -2,7 +2,7 @@
   <div class="app-container zksearchclass">
    
     <div id="query">
-      <el-col :span="18" :offset="6">
+      <el-col :span="17" :offset="7">
           <table class="querytable">
              <tr>
                 <td class="tdtitle" style="width:180px">单号</td>
@@ -21,37 +21,31 @@
                     </el-input>
                   </td>
                   <td> 
-                    <el-select
-                      v-model="search.StartStation"
+                     <big-data-select             
+                      :val.sync="search.StartStation"
                       placeholder="起运站"
-                      style="width:95%"
+                      style="width: 95%"
+                      size="mini"
                       clearable
-                      filterable
-                    >
-                      <el-option
-                        v-for="item in siteList"
-                        :key="item.value"
-                        :label="item.displayText"
-                        :value="item.value"
-                      ></el-option>
-                    </el-select>
+                      filterable                
+                      :data="siteList"
+                      optionkey="displayText"
+                      optionValue="value"
+                    ></big-data-select>
                   </td>
                   <td> 
-                    <el-select
-                      v-model="search.EndStation"
+
+                     <big-data-select             
+                      :val.sync="search.EndStation"
                       placeholder="目的站"
-                      style="width:95%"
+                      style="width: 95%"
+                      size="mini"
                       clearable
-                      filterable
-                 
-                    >
-                      <el-option
-                        v-for="item in siteList"
-                        :key="item.value"
-                        :label="item.displayText"
-                        :value="item.value"
-                      ></el-option>
-                    </el-select>
+                      filterable                
+                      :data="siteList"
+                      optionkey="displayText"
+                      optionValue="value"
+                    ></big-data-select>
                      <!-- <el-select
                       v-model="search.line"
                       placeholder="航线"
@@ -91,7 +85,30 @@
                     clearable
                                       
                   >
-                    <el-option
+                  <div  style="width:280px" v-for="item in boxList" :key="item.xxcc">
+                    <el-col :span="10">
+                       <el-option             
+                       :key="item.xxcc"
+                       :label="item.lable+'  *  '+item.qty.toString()"
+                       :value="item.xxcc+item.qty"
+                    ></el-option>
+                    </el-col>
+                     <el-col :span="12">
+                        <el-input-number
+                          placeholder="箱量"
+                          v-model="item.qty"
+                          controls-position="right"                                                            
+                          :step="1"
+                          clearable
+                          :min="0"
+                          style="width:100%;padding-left:20px;"
+                        
+                          ></el-input-number>
+                     </el-col>
+                   
+                    
+                  </div>
+                    <!-- <el-option
                       v-for="item in boxList"
                        :key="item.xxcc"
                       :label="item.lable+'*'+item.qty.toString()"
@@ -112,7 +129,7 @@
                           ></el-input-number>
                     
                    
-                    </el-option>  
+                    </el-option>   -->
                    </el-select>  
                   </td>               
                   <td>
@@ -135,7 +152,7 @@
                   <td>
                      <el-button type="primary" size="mini" class="btnset"
                      @click="onSearchBefore();getTableList()">
-                     租客查询
+                     查询
                      </el-button>
                   </td>
               </tr>
@@ -146,24 +163,47 @@
     </div>
 
      <div style="padding-top:30px;height:calc(100% - 200px)">
-      <el-col  :span="3" :offset="4">
-       <el-card style="margin-right:20px;padding-left:20px;height:200px">
-       <div style="font-size:16px;padding-bottom:20px">是否完成</div>
+    
+      <el-col  :span="4" :offset="3">
+       <el-card style="margin-right:20px;padding-left:20px;height:450px">
+       <el-col :span="24">
+       <div style="font-size:16px;padding-bottom:20px">是否匹配</div>
        <div>      
-  
+       <!-- <div style="padding-left:20px"> -->
            <div><el-checkbox  v-model="checked1" style="padding-bottom:20px;"  @change="Finishselect(1)">全部</el-checkbox></div> 
-           <div><el-checkbox v-model="checked2" style="padding-bottom:20px;" @change="Finishselect(2)">已完成</el-checkbox></div> 
-          <div><el-checkbox v-model="checked3"  @change="Finishselect(3)">未完成</el-checkbox></div>   
+           <div><el-checkbox v-model="checked2" style="padding-bottom:20px;" @change="Finishselect(2)">已匹配</el-checkbox></div> 
+          <div><el-checkbox v-model="checked3"  @change="Finishselect(3)">未匹配</el-checkbox></div>   
+       <!-- </div> -->
        </div>
+       </el-col>
+          <el-col :span="24" style="padding-bottom:20px;">
+        <div style="font-size:16px;padding-bottom:20px;padding-top:20px">路线筛选</div>       
+        <el-col :span="8" >
+         <el-button type="text" @click="onsearch('')" >
+         <span>全部</span>
+         </el-button>
+        </el-col>
+        <el-col :span="8"   v-for="(val, key) in lineList" :key="key" >
+         <!-- <el-link :underline="false" @click="onsearch(val.value)" style="padding-bottom:20px;">
+         <span :style="'color:'+val.code">{{val.displayText}}</span>
+         </el-link> -->
+         <el-button type="text" @click="onsearch(val.value)">
+          <span :style="'color:'+val.code">
+            {{val.displayText}}
+            </span>
+            </el-button>
+        </el-col>
+         
+        
+       </el-col>
        </el-card >
      </el-col>
-      <el-col  :span="16"  style="height:calc(100% - 10px)">  
+      <el-col  :span="16"  style="height:calc(100% - 15px)">  
       <el-table
         :data="tableData"
         :cell-class-name="tableRowClassName"
         :row-key="getRowKeys"
-        @selection-change="onSelectChange"      
-        stripe
+        @selection-change="onSelectChange"             
         highlight-current-row
         fit
         height="100%"
@@ -172,7 +212,9 @@
         v-loading="table.loading"
         @sort-change="sortChange"
         @select="handleSelectionChange"
+       
       >
+        <!-- :row-style="rowStayle" -->
          <el-table-column
               align="center"
               prop="billNO"
@@ -180,7 +222,7 @@
             width="150px"
               sortable="custom"
               show-overflow-tooltip
-              fixed="left"
+             
             >
              <template slot-scope="scope">
             {{ scope.row.billNO
@@ -265,6 +307,7 @@
       </el-table>
       <el-pagination
         style="margin-top:10px;"
+         align="center"
         @size-change="handleSizeChange"
         @current-change="handleCurrentChange"
         :current-page="page.currentPage"
@@ -297,7 +340,7 @@ import {GetZKDelInfoList} from "api/OnlineSearch";
 import { GetSiteList,GetLineList ,GetXXCCList} from "api/publicBase/Combox";
 import ShowFilePage from './ShowFilePage'
 import { parseTime } from "utils";
-
+import colorList from 'store/colorList';
 
 
 export default {
@@ -336,6 +379,24 @@ export default {
     getRowKeys(row) {
       return row.id.toString();
     },
+    //不路线不同颜色
+    rowStayle(row , colum , rowIndex , columnIndex) { 
+         if (row.row.lineID ==="" ||row.row.lineID ===null || row.row.lineID ===undefined ) 
+         {       
+           return "";   
+         }    
+         else{
+          var rowcolor=colorList[row.row.lineID];
+          // return "color:white;background-color:"+rowcolor+"!important;";  
+           return "color:"+rowcolor+"!important;"; 
+         }
+         
+     },
+     onsearch(line)
+    {
+      this.search.line=line;
+      this.getTableList();
+    },
      //获取站点
     getsiteList() {
       GetSiteList().then(res => {
@@ -346,6 +407,10 @@ export default {
     getlineList() {
       GetLineList().then(res => {
         this.lineList = res.result;
+         this.lineList.forEach(item=>{
+          var ccindex=Number(item.value);
+          item.code=colorList[ccindex];
+        })
       });
     },
               //箱型尺寸
@@ -466,6 +531,13 @@ export default {
 
 <style lang="scss">
 .zksearchclass {
+    .el-table__body tr:hover > td{
+    color:black !important;
+   //background-color: black !important;
+   }     
+  .el-table__body tr.current-row > td {
+   color:black !important;
+  }
   background-color: rgb(248, 252, 254);
   #query {
       background: url("../../assets/images/u1.jpg");

@@ -40,7 +40,7 @@
           </el-col>
           
              
-          <el-col :span="8">
+          <!-- <el-col :span="8">
             <el-form-item label="是否库存："  v-if="type==='XD'">
                {{form.isInStock}}            
             </el-form-item>
@@ -49,8 +49,8 @@
             <el-form-item label="预计到站时间："  v-if="type==='XD'">
                {{form.predictTime}} 
             </el-form-item>
-          </el-col>       
-          <el-col :span="12">
+          </el-col>        -->
+          <el-col :span="8">
             <el-form-item label="有效时间：" >
                 {{form.effectiveSTime +" 至 "+ form.effectiveETime}} 
             </el-form-item>
@@ -105,6 +105,30 @@
                 prop="quantity"
                 show-overflow-tooltip
                 label="箱量"
+            min-width="12%"  
+                sortable="custom"
+            ></el-table-column>
+            <el-table-column
+                align="center"
+                prop="maxWeight"
+                show-overflow-tooltip
+                label="最大载重"
+            min-width="12%"  
+                sortable="custom"
+            ></el-table-column>
+            <el-table-column
+                align="center"
+                prop="freezerModel"
+                show-overflow-tooltip
+                label="冻柜型号"
+            min-width="12%"  
+                sortable="custom"
+            ></el-table-column>
+            <el-table-column
+                align="center"
+                prop="boxLabel"
+                show-overflow-tooltip
+                label="箱标"
             min-width="12%"  
                 sortable="custom"
             ></el-table-column>

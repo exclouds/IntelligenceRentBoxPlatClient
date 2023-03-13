@@ -1,6 +1,6 @@
 <template>
   <div style="width:100%;"  class="sidebarcalss">
-    <el-col :span="5" :offset="1"  align="center" class="leftshowclass">
+    <el-col :span="8" :offset="1"  class="leftshowclass">
       <el-col :span="11" style=" text-align:right;">
          <img id="u0_img" class="img"  
           :src="require('@/views/dashboard/css/images/logo.png')" />
@@ -11,7 +11,13 @@
       
       
     </el-col>
-    <el-col :span="14"  >
+    <!-- <el-col :span="5" :offset="1"  align="center" class="leftshowclass">
+      <img id="u0_img" class="img"  
+          :src="require('@/views/dashboard/css/images/logo.png')" />    
+      <span style="padding-top:-20px">云租箱平台</span>            
+    </el-col> -->
+    
+    <el-col :span="11"  >
       <el-menu
          :unique-opened = true
          :show-timeout="200"
@@ -80,10 +86,12 @@
       
     </el-col>
       <el-col :span="1"  align="center" >
-        <el-tooltip content="客服电话：8888888" placement="top" effect="light">         
-           <img id="u0_img"  class="img" 
+        <!-- <el-tooltip content="客服电话：8888888" placement="top" effect="light">          -->
+        <a href="http://47.103.117.243:1922/#/imclient" target="_blank">  
+        <img id="u0_img"  class="img" 
            src="../../assets/images/u87.png" />
-          </el-tooltip>
+        </a>
+          <!-- </el-tooltip> -->
         
         
       </el-col>

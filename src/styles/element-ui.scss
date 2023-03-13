@@ -296,3 +296,9 @@
 .el-form-item--mini .el-form-item__content, .el-form-item--mini .el-form-item__label {
   line-height: 40px!important;
 }
+.el-pagination .el-select .el-input .el-input__inner {
+  height: 30px!important;
+}
+.el-pagination__editor.el-input .el-input__inner {
+  height: 30px!important;
+}

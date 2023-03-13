@@ -29,7 +29,18 @@
           </el-col>
           <el-col :span="5">
             <el-form-item label="起运站：" prop="startStation">
-              <el-select
+               <big-data-select             
+              :val.sync="form.startStation"
+              placeholder="起运站"
+               style="width:99%"
+              size="mini"
+              clearable
+              filterable                
+              :data="siteList"
+              optionkey="displayText"
+              optionValue="value"
+            ></big-data-select>
+              <!-- <el-select
               v-model="form.startStation"
               placeholder="起运站"
               style="width:99%"
@@ -42,7 +53,7 @@
                 :label="item.displayText"
                 :value="item.value"
               ></el-option>
-            </el-select>
+            </el-select> -->
             </el-form-item>
           </el-col>
         <!-- </el-row>
@@ -67,7 +78,7 @@
             </el-form-item>
           </el-col>
           <el-col :span="6">
-            <el-form-item label="目的站：" prop="endStation">
+            <el-form-item label="目的站：" prop="endStation">             
                <el-select
               v-model="form.endStation"
               placeholder="目的站"
@@ -265,7 +276,97 @@
                     </el-form-item>           
                  </template>
                 </el-table-column>
+                 <el-table-column
+                  align="center"
+                  prop="boxAge"
+                  show-overflow-tooltip
+                  label="最大载重"
+                width="150"
+                  sortable="custom"
+                >
+                 <template slot-scope="scope">
+                    <el-form-item label="" :prop="'boxDetails.'+(countIndex(scope.$index)-1) + '.maxweight'" :rules='rules.boxAge'  label-width="0px">
+                    <el-input-number
+                    placeholder="最大载重"
+                    v-model="scope.row.maxweight"
+                     controls-position="right"                                                            
+                    :step="0.01"
+                    clearable
+                    style="width: 100%"
+                    ></el-input-number>
+                    </el-form-item>             
+                 </template>
+                </el-table-column>
+                 <el-table-column
+                  align="center"
+                  prop="freezerModel"
+                  show-overflow-tooltip
+                  label="冻柜型号"
+                  width="160"
+                  sortable="custom"
+                  
+                >
+                 <template slot-scope="scope">
+                    <el-form-item label="" :prop="'boxDetails.'+(countIndex(scope.$index)-1) + '.boxAge'" :rules='rules.freezerModel'  label-width="0px">
+                     <el-select                 
+                    size="mini"
+                    v-model="scope.row.freezerModel"
+                    filterable
+                    placeholder="冻柜型号"
+                    style="width: 100%"
+                    clearable
+                  >
+                    <el-option value="69NT40-561-018">69NT40-561-018</el-option>  
+                    <el-option value="69NT40-541-320">69NT40-541-320</el-option>
+                   
+                   </el-select>  
+                    </el-form-item>             
+                 </template>
+                </el-table-column>
+                 <el-table-column
+                  align="center"
+                  prop="boxLabel"
+                  show-overflow-tooltip
+                  label="箱标"
+                width="150"
+                  sortable="custom"
+                >
+                 <template slot-scope="scope">
+                    <el-form-item label="" :prop="'boxDetails.'+(countIndex(scope.$index)-1) + '.boxLabel'" :rules='rules.boxAge'  label-width="0px">
+                     <el-select                 
+                    size="mini"
+                    v-model="scope.row.boxLabel"
+                    filterable
+                    placeholder="箱标"
+                    style="width: 100%"
+                  >
+                    <el-option value="IICL">IICL国际标准</el-option> 
+                    <el-option value="IICA">IICA适货标准</el-option>   
+                   </el-select>  
+                    </el-form-item>             
+                 </template>
+                </el-table-column>
                 <el-table-column
+                  align="center"
+                  prop="boxTime"
+                  show-overflow-tooltip
+                  label="生产年限"
+                width="150"
+                  sortable="custom"
+                >
+                 <template slot-scope="scope">
+                    <el-form-item label="" :prop="'boxDetails.'+(countIndex(scope.$index)-1) + '.boxTime'" :rules='rules.boxAge'  label-width="0px">
+                     <el-date-picker
+                      v-model="scope.row.boxTime"
+                      type="month"
+                      style="width:100%"
+                      value-format="yyyy-MM-dd"
+                      placeholder="生产年限">
+                    </el-date-picker>
+                    </el-form-item>             
+                 </template>
+                </el-table-column>
+                <!-- <el-table-column
                   align="center"
                   prop="boxAge"
                   show-overflow-tooltip
@@ -285,7 +386,7 @@
                     ></el-input-number>
                     </el-form-item>             
                  </template>
-                </el-table-column>
+                </el-table-column> -->
                 <el-table-column
                   align="center"
                   prop="remarks"
@@ -473,7 +574,11 @@ export default {
             size:  "",
             quantity: 0,      
             boxAge: 0,
-            remarks:  ""
+            remarks:  "",
+            boxTime:null,
+            boxLabel:"",
+            maxweight:"",
+            freezerModel:""
           }],
         };
         this.linesiteList=[];
@@ -510,7 +615,11 @@ export default {
             size:  "",
             quantity: 0,      
             boxAge: 0,
-            remarks:  ""
+            remarks:  "",
+             boxTime:null,
+            boxLabel:"",
+            maxweight:"",
+            freezerModel:""
           }],
       },
       flag: true,
@@ -535,7 +644,7 @@ export default {
            box: [{ required: true, message: "请选择箱型" ,trigger: "change"}],
         size: [{ required: true, message: "请选择尺寸" ,trigger: "change"}],
         quantity: [{ required: true, message: "请输入箱量", trigger: "blur" }],
-        boxAge: [{ required: true, message: "请输入箱龄", trigger: "blur" }],
+        //boxAge: [{ required: true, message: "请输入箱龄", trigger: "blur" }],
       }
     };
   },
@@ -704,7 +813,11 @@ export default {
           quantity: 0,
           boxNO:  "",
           boxAge: 0,
-          remarks:  ""
+          remarks:  "",
+           boxTime:null,
+            boxLabel:"",
+            maxweight:"",
+            freezerModel:""
      };
      this.form.boxDetails.push(newdata);
 
