@@ -72,8 +72,7 @@ export const constantRouterMap = [
         title: '首页',
         icon: '个人中心',
         keepAlive: true,
-        iswhite:true
-        
+       
       },
     },
     // {
@@ -117,7 +116,7 @@ export const asyncRouterMap = [
     path: '/XDDelInfo',
     component: Layout,
     redirect: '/XDDelInfo',  
-    alwaysShow: false,
+    alwaysShow: true,
     meta: {
       title: '箱东信息发布',
       icon: '个人客户',
@@ -131,7 +130,7 @@ export const asyncRouterMap = [
           title: '箱东信息发布',
           icon: '个人客户',
           keepAlive: true,
-          iswhite:true
+         
         },
        
       },
@@ -142,7 +141,7 @@ export const asyncRouterMap = [
     path: '/ZKDelInfo',
     component: Layout,
     redirect: '/ZKDelInfo',  
-    alwaysShow: false,
+    alwaysShow: true,
     meta: {
       title: '箱东信息发布',
       icon: '个人客户',
@@ -156,7 +155,7 @@ export const asyncRouterMap = [
           title: '租客信息发布',
           icon: '个人客户',
           keepAlive: true,
-          iswhite:true
+         
         },
        
       },
@@ -168,7 +167,7 @@ export const asyncRouterMap = [
     path: '/ZKSeachInfo',
     component: Layout,
     redirect: '/ZKSeachInfo',  
-    alwaysShow: false,
+    alwaysShow: true,
     meta: {
       title: '在线查询',
       icon: '个人客户',
@@ -182,7 +181,7 @@ export const asyncRouterMap = [
           title: '箱东查询',
           icon: '个人客户',
           keepAlive: true,
-          iswhite:true
+          
         },
        
       },
@@ -193,7 +192,7 @@ export const asyncRouterMap = [
     path: '/XDSeachInfo',
     component: Layout,
     redirect: '/XDSeachInfo',  
-    alwaysShow: false,
+    alwaysShow: true,
     meta: {
       title: '在线查询',
       icon: '个人客户',
@@ -207,7 +206,7 @@ export const asyncRouterMap = [
           title: '租客查询',
           icon: '个人客户',
           keepAlive: true,
-          iswhite:true
+          
         },
        
       },
@@ -294,7 +293,7 @@ export const asyncRouterMap = [
     path: '/InRecommond',
     component: Layout,
     redirect: '/InRecommond',  
-    alwaysShow: false,
+    alwaysShow: true,
     meta: {
       title: '用户',
       icon: '智能推荐',
@@ -308,7 +307,7 @@ export const asyncRouterMap = [
           title: '智能推荐',
           icon: '个人客户',
           keepAlive: true,
-          iswhite:true
+        
         },
        
       },
@@ -318,9 +317,9 @@ export const asyncRouterMap = [
         name: 'DelivInfoDetailIndex',
         hidden: true,
         meta: {
-          title: '打印收费联系单',
+          title: '信息详情',
           keepAlive: true,
-          roles: ['root.qt.hd']
+         
         }
       },
              
@@ -331,7 +330,7 @@ export const asyncRouterMap = [
     path: '/Users',
     component: Layout,
     redirect: '/Users',  
-    alwaysShow: false,
+    alwaysShow: true,
     meta: {
       title: '用户',
       icon: '个人客户',
@@ -345,7 +344,7 @@ export const asyncRouterMap = [
           title: '用户注册',
           icon: '个人客户',
           keepAlive: true,
-          iswhite:true
+         
         },
        
       },

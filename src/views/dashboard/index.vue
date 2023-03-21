@@ -16,7 +16,7 @@
                <td class="tdtitle">目的站</td>
               <td class="tdtitle">箱型箱量</td>             
                <!-- <td class="tdtitle">箱量</td> -->
-               <td class="tdtitle" style="min-width:360px">用箱时间</td>
+               <td class="tdtitle">用箱时间</td>
                <!-- <td class="tdtitle" ></td> -->
               <td class="tdtitle"></td>
               </tr>
@@ -123,32 +123,31 @@
                     ></el-input-number>   
                    </td> -->
                     <td> 
-                        <el-date-picker
+                        <!-- <el-date-picker
                         v-model="search.EffectiveTime"
                         type="daterange"
                         range-separator="至"
                         start-placeholder="开始日期"
                         end-placeholder="结束日期"
                           style="width: 100%">
-                      </el-date-picker>
-                       <!-- <el-date-picker
-                      v-model="search.EffectiveSTime"
-                      type="date"
-                      clearable
-                      placeholder="用箱时间起"
-                       style="width:95%">
-                    </el-date-picker> -->
+                      </el-date-picker> -->
+                        <el-date-picker
+                          v-model="search.EffectiveSTime"
+                          type="date"
+                          placeholder="用箱时间起"
+                          style="width:150px">
+                        </el-date-picker>
                     
                     </td>
-                    <!-- <td> 
-                     <el-date-picker
-                      v-model="search.EffectiveETime"
-                      type="date"
-                      clearable
-                      placeholder="用箱时间止"
-                       style="width:95%">
-                    </el-date-picker>
-                     </td> -->
+                     <td>
+                         <el-date-picker
+                          v-model="search.EffectiveETime"
+                          type="date"
+                          placeholder="用箱时间止"
+                          style="width:150px">
+                        </el-date-picker>
+                  </td>
+                   
                 <td>
                   <div style="padding-left: 20px;">
                      <el-button  class="btnset" 

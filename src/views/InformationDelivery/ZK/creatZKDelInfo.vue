@@ -28,10 +28,10 @@
             </el-form-item>
           </el-col>
           <el-col :span="5">
-            <el-form-item label="起运站：" prop="startStation">
+            <el-form-item label="提箱地：" prop="startStation">
                <big-data-select             
               :val.sync="form.startStation"
-              placeholder="起运站"
+              placeholder="提箱地"
                style="width:99%"
               size="mini"
               clearable
@@ -42,7 +42,7 @@
             ></big-data-select>
               <!-- <el-select
               v-model="form.startStation"
-              placeholder="起运站"
+              placeholder="提箱地"
               style="width:99%"
               clearable
               filterable
@@ -78,10 +78,10 @@
             </el-form-item>
           </el-col>
           <el-col :span="6">
-            <el-form-item label="目的站：" prop="endStation">             
+            <el-form-item label="还箱地：" prop="endStation">             
                <el-select
               v-model="form.endStation"
-              placeholder="目的站"
+              placeholder="还箱地"
               style="width:99%"
               clearable
               filterable
@@ -126,10 +126,16 @@
             </el-select>
             </el-form-item>
           </el-col>
-            <el-col :span="11">
-            <el-form-item label="有效时间：" prop="submitDateRange">
-              <el-date-picker
-                v-model="form.submitDateRange"
+            <el-col :span="5">
+            <el-form-item label="有效时间起：" prop="effectiveSTime">
+               <el-date-picker
+                v-model="form.effectiveSTime"
+                type="date"
+                placeholder="有效时间起"
+                style="width: 100%">
+              </el-date-picker>
+              <!-- <el-date-picker
+                v-model="form.effectiveSTime"
                 type="daterange"
                 align="right"                
                 unlink-panels
@@ -139,7 +145,17 @@
                 :picker-options="pickerRangeOptions"
                 clearable
                 style="width: 100%"
-              ></el-date-picker>  
+              ></el-date-picker>   -->
+            </el-form-item>
+          </el-col>
+            <el-col :span="6">
+            <el-form-item label="有效时间止：" prop="effectiveETime">
+            <el-date-picker
+                v-model="form.effectiveETime"
+                type="date"
+                placeholder="有效时间止"
+                style="width: 100%">
+              </el-date-picker>
             </el-form-item>
           </el-col>
             <el-col :span="21" >
@@ -183,7 +199,7 @@
                 <el-table-column type="index" align="center" label="序号" width="50">
                   <template slot-scope="scope">{{countIndex(scope.$index)}}</template>
                 </el-table-column>
-                <el-table-column
+                <!-- <el-table-column
                   align="center"
                   prop="boxNO"
                   show-overflow-tooltip
@@ -200,7 +216,7 @@
                     style="width: 100%"
                   ></el-input>                   
                  </template>
-                </el-table-column>
+                </el-table-column> -->
               
                 <el-table-column
                   align="center"
@@ -442,10 +458,12 @@
                 :auto-upload="false"
                 :http-request="httpRequest"
                 :multiple="true"
-                :show-file-list="true">
+                :show-file-list="true"
+                >
                 <el-button slot="trigger" size="small" style="width:100px;padding:8px" type="primary">选取附件</el-button>
-                <el-button style="margin-left: 10px;" size="small" type="success" @click="submitUpload">上传附件</el-button>
-              </el-upload>
+                <!-- <el-button style="margin-left: 10px;" size="small" type="success" @click="submitUpload">上传附件</el-button>
+             -->
+              </el-upload> 
           
           </el-col>
            
@@ -521,7 +539,7 @@
       </el-form>
       <span slot="footer" class="dialog-footer">
         <el-button @click="windowShow = false" size="small">取 消</el-button>
-        <el-button type="primary" @click="save()" :loading="btnLoading" size="small">确认发布</el-button>
+        <el-button type="primary" @click="save()" :loading="formLoading" size="small">确认发布</el-button>
       </span>
     </el-dialog>
   </div>
@@ -534,7 +552,7 @@ import { GetSiteList,GetLineList,GetLineSiteList } from "api/publicBase/Combox";
 import { pickerRangeOptions } from "consts/common";
 import { parseTime } from "utils";
 import { GetUploaFile,GetUPFile,BathDeltefile } from "api/publicBase/Attachment";
-import { warnMsg } from "utils/messageBox";
+import { warnMsg,successMsg } from "utils/messageBox";
 import { tableMixin } from "mixin/commTable";
 
 export default {
@@ -558,13 +576,13 @@ export default {
           billNO: "", 
           startStation: "", 
           endStation: [],
-          // effectiveSTime: "", 
-          // effectiveETime: "",
+          effectiveSTime: null,  
+          effectiveETime: null,
           hopePrice: 0,
           line: "",
           isEnable:true,
           remarks: "", //备注
-          submitDateRange:[],
+          //submitDateRange:[],
           fileList:[],
            boxDetails:[{
             id: "",
@@ -578,11 +596,16 @@ export default {
             boxTime:null,
             boxLabel:"",
             maxweight:"",
-            freezerModel:""
+            freezerModel:""          
           }],
         };
         this.linesiteList=[];
         this.fileList=[];
+        this.btnLoading = false;
+        this.formLoading = false;
+        // this.upfilecount=0;
+        // this.upsuccess=0;
+        // this.IsALLSuccess= true;
         this.$emit("on-show-change", newValue);
       }
     }
@@ -598,13 +621,13 @@ export default {
         billNO: "", 
         startStation: "", 
         endStation:[], 
-        // effectiveSTime: "", 
-        // effectiveETime: "",
+        effectiveSTime: null,  
+        effectiveETime: null,
         hopePrice: 0,
         line: "",
         isEnable:true,
         remarks: "", //备注
-        submitDateRange:[],
+       // submitDateRange:[],
         fileList:[],
        
          boxDetails:[{
@@ -629,22 +652,28 @@ export default {
       boxList: [],
       sizeList: [],
      delbtnLoading:false,
+    //  upfilecount:0,
+    //  upsuccess:0,
+    //  IsALLSuccess:true,
       //定义字段校验规则
       rules: {
         //billNO: [{ required: true, message: "请选择船公司" }],
         startStation: [{ required: true, message: "请选择起运地" ,trigger: "change"}],
-        // endStation: [{ required: true, message: "请选择目的站" ,trigger: "change"}],
+        endStation: [{ required: true, message: "请选择还箱地" ,trigger: "change"}],
         line: [{ required: true, message: "请选择航线" ,trigger: "change"}],
-        submitDateRange: [
-        { required: true, message: '请选择有效时间'},
-        {validator: this.validatetime},
-        ],
+        // submitDateRange: [
+        // { required: true, message: '请选择有效时间'},
+        // {validator: this.validatetime},
+        // ],
         hopePrice: [{ required: true, message: "请输入期望成交价", trigger: "blur" }],
          boxDetails: [ {validator: this.validatedetail}],
            box: [{ required: true, message: "请选择箱型" ,trigger: "change"}],
         size: [{ required: true, message: "请选择尺寸" ,trigger: "change"}],
         quantity: [{ required: true, message: "请输入箱量", trigger: "blur" }],
         //boxAge: [{ required: true, message: "请输入箱龄", trigger: "blur" }],
+         effectiveSTime: [{ required: true, message: "请选择有效时间起" }],
+         effectiveETime: [{ required: true, message: "请选择有效时间止" }],
+        
       }
     };
   },
@@ -729,11 +758,14 @@ export default {
         .then(res => {
           this.form = res.result;
            this.form.line = res.result.line.toString();
-         var submitDateRange=[];
-        
-        submitDateRange.push(res.result.effectiveSTime);
-        submitDateRange.push(res.result.effectiveETime);
-        this.$set(this.form, 'submitDateRange', submitDateRange);
+       
+       // var submitDateRange=[];       
+        // submitDateRange.push(res.result.effectiveSTime);
+        // submitDateRange.push(res.result.effectiveETime);
+        // this.$set(this.form, 'submitDateRange', submitDateRange);
+
+        // this.$set(this.form, 'effectiveSTime', res.result.effectiveSTime);
+        // this.$set(this.form, 'effectiveETime', res.result.effectiveETime);
         this.getlinesiteList(res.result.endStation);
         //this.form.submitDateRange=submitDateRange;
           this.formLoading = false;
@@ -759,10 +791,10 @@ export default {
     save() {
       this.$refs["ruleForm"].validate(valid => {
         if (valid) {
-          let msg = this.form.id
-            ? "编辑租客信息发布"
-            : "新增租客信息发布";
-          this.btnLoading = true;
+          // let msg = this.form.id
+          //   ? "编辑租客信息发布"
+          //   : "新增租客信息发布";
+        
           let data={
               id: this.form.id,
               billNO: this.form.billNO, 
@@ -773,32 +805,73 @@ export default {
               line: this.form.line,
               isEnable:this.form.isEnable,
               remarks: this.form.remarks, //备注
-            BoxDetails:this.form.boxDetails
+              BoxDetails:this.form.boxDetails,
+              EffectiveSTime:parseTime( this.form.effectiveSTime),
+              EffectiveETime:parseTime( this.form.effectiveETime),
           };
-          
-           if (
-              this.form.submitDateRange != null &&
-              this.form.submitDateRange != undefined &&
-              this.form.submitDateRange.length > 0
-            ) {
-              data.EffectiveSTime = parseTime(this.form.submitDateRange[0]);
-              data.EffectiveETime = parseTime(this.form.submitDateRange[1]);
-            } else {
-              // data.settleTimebegin = null;
-              // data.settlenTimeend = null;
-              warnMsg("请选择有效时间");
-              return;
-            }
-          ZKDelInfoAddEdit(
-            data,
-            msg
-          )
+               
+          this.formLoading = true;
+          ZKDelInfoAddEdit( data )
             .then(res => {
-              this.btnLoading = false;           
-              this.GetZKDelInfoSingle(res.result.id);         
+              // this.form.id=res.result.id;
+              // this.form.billNO=res.result.billNO;
+              var files = this.$refs.upload.uploadFiles;
+              var  upfilecount=files.length;            
+              var  IsALLSuccess= true;
+              if(upfilecount>0)
+              {
+                // this.formLoading = false; 
+                //  this.$refs.upload.submit();     
+                files.forEach((item,index) => {           
+                  let formData = new FormData();
+                    formData.append("files", item.raw);
+                    formData.append("type", "ZK");
+                    formData.append("billno", res.result.billNO);
+                    formData.append("id",res.result.id);
+                    GetUploaFile(formData).then(res2 => {
+                      if (res2.success) {  
+                       // successMsg(this.upfilecount+'/'+this.upsuccess)
+                        if(upfilecount===(index+1))      
+                        { 
+                          if(IsALLSuccess)
+                          {
+                            successMsg('信息发布成功!');
+                          }
+                          else{
+                            warnMsg('信息发布成功,部分附件上传失败!');     
+                          }
+
+                          this.$refs.upload.clearFiles();
+                            //this.getfileList();
+                            this.formLoading = false;           
+                            this.GetZKDelInfoSingle(res.result.id); 
+                      
+                        }
+                      
+                      }
+                    })
+                    .catch(err=>{
+                      IsALLSuccess= false;
+                      if(upfilecount===(index+1)) {
+                        warnMsg('信息发布成功,部分附件上传失败!');                
+                        this.formLoading = false;           
+                        this.$refs.upload.clearFiles();
+                        this.GetZKDelInfoSingle(res.result.id);
+                      }
+                    
+                    })
+                });            
+              }
+              else{
+                 this.formLoading = false;           
+                 this.GetZKDelInfoSingle(res.result.id);  
+                  successMsg('信息发布成功!');    
+              }
+              
+                
             })
             .catch(err => {
-              this.btnLoading = false;
+              this.formLoading = false;
             });
         }
       });
@@ -849,21 +922,28 @@ export default {
       });
         }
       },
-    httpRequest(param){
-      
-      let formData = new FormData();
-          formData.append("files", param.file);
-          formData.append("type", "ZK");
-          formData.append("billno", this.form.billNO);
-          formData.append("id", this.form.id);
-          GetUploaFile(formData).then(res => {
-            if (res.success) {         
-              this.$message.success('文件上传成功!');
-              this.getfileList();
-            }
-          })
+    httpRequest(param){   
+        let formData = new FormData();
+        formData.append("files", param.file);
+        formData.append("type", "ZK");
+        formData.append("billno", this.form.billNO);
+        formData.append("id", this.form.id);
+        GetUploaFile(formData).then(res => {
+          if (res.success) {  
+           
+          }
+        })
+        .catch(err=>{
+          
+        })
+
     },
-   
+   uploadsuccess(){
+       successMsg('信息发布成功!');
+            //this.getfileList();
+       this.formLoading = false;           
+       this.GetZKDelInfoSingle(this.form.id); 
+   },
     getfileList()
     {
       if(this.form.id)

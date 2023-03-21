@@ -96,15 +96,16 @@ router.beforeEach((to, from, next) => {
       }
     }
   } 
-  else if( to.path === '/dashboard' ||  to.path === '/InRecommond/InteRecommend') {
+  else if( to.path === '/dashboard' ||  to.path === '/InRecommond/InteRecommend'
+  ) {
  
-    store.dispatch('GenerateRoutes', { roles }).then((routeParse) => { // 根据roles权限生成可访问的路由表
+  //   store.dispatch('GenerateRoutes', { roles }).then((routeParse) => { // 根据roles权限生成可访问的路由表
       
-      router.addRoutes(routeParse) // 动态添加可访问路由表
-      //next({ ...to, replace: true })
-      next()
-   })
-   
+  //     router.addRoutes(routeParse) // 动态添加可访问路由表
+  //     //next({ ...to, replace: true })
+  //     next()
+  //  })
+   next()
   } 
   else {
     next('/login'); // 否则全部重定向到登录页

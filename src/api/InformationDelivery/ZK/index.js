@@ -19,13 +19,12 @@ export function GetZKDelInfoSingle(obj) {
   });
 }
 //编辑
-export function ZKDelInfoAddEdit(obj,msg) {
+export function ZKDelInfoAddEdit(obj) {
   return fetch({
     url: '/DBService/api/services/app/ZKInforDelivery/ZKDelInfoAddEdit',
     method: 'post',
-    data:obj,
-    msg:msg
-   
+    data:obj
+  
   });
 }
 //删除

@@ -11,10 +11,10 @@
           </el-form-item>
         </el-col>
         <el-col :span="3">
-          <el-form-item label="起运站：" prop label-width="90px">
+          <el-form-item label="提箱地：" prop label-width="90px">
             <big-data-select             
               :val.sync="search.StartStation"
-              placeholder="起运站"
+              placeholder="提箱地"
               style="width: 100%"
               size="mini"
               clearable
@@ -44,10 +44,10 @@
           </el-form-item>
         </el-col>
         <!-- <el-col :span="4">
-          <el-form-item label="目的站：" prop>
+          <el-form-item label="还箱地：" prop>
             <el-select
               v-model="search.EndStation"
-              placeholder="目的站"
+              placeholder="还箱地"
               style="width:100%"
              clearable
               filterable
@@ -154,7 +154,7 @@
         <el-table-column
           align="center"
           prop="startStation"
-          label="起运站"
+          label="提箱地"
            width="120px"
           sortable="custom"
           show-overflow-tooltip
@@ -171,7 +171,7 @@
          <el-table-column
           align="center"
           prop="endStation"
-          label="目的站"
+          label="还箱地"
           width="120px"
           sortable="custom"
           show-overflow-tooltip
@@ -363,7 +363,7 @@ export default {
         StartStation: "",
         line: "",
         EndStation: [],
-        IsEnable: undefined,
+        IsEnable: true,
         IsVerify: undefined,
         Finish: undefined,
       },

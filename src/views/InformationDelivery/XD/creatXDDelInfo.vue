@@ -1,12 +1,13 @@
 <template>
-  <div class="addxdset">
+  <div class="addxdset" v-loading="formLoading">
     <el-dialog
       :title="form.id==''?'新增箱东信息发布':'编辑箱东信息发布'"
       v-dialogDrag
       :visible.sync="windowShow"
       width="1800px"
       :close-on-click-modal="false"
-      :close-on-press-escape="false"    
+      :close-on-press-escape="false" 
+         
     >
        <el-form
         size="mini"
@@ -65,10 +66,11 @@
             </el-form-item>
           </el-col>
           <el-col :span="6">
-            <el-form-item label="目的站：" prop="endStation">
+            <el-form-item label="还箱地：" prop="endStation">
+            
                <el-select
               v-model="form.endStation"
-              placeholder="目的站"
+              placeholder="还箱地"
               style="width:99%"
               clearable
               filterable
@@ -84,24 +86,22 @@
             </el-select>
             </el-form-item>
           </el-col>
-            <el-col :span="4">
+            <!-- <el-col :span="4">
             <el-form-item label="还箱地：" prop="returnStation">
-              <el-select
-                v-model="form.returnStation"
-                placeholder="请选择还箱地"
-                style="width:100%"
-                clearable
-                filterable
-              >
-               <el-option
-                v-for="item in siteList"
-                :key="item.value"
-                :label="item.displayText"
-                :value="item.value"
-              ></el-option>
-              </el-select>
+              <big-data-select             
+              :val.sync="form.returnStation"
+              placeholder="还箱地"
+              style="width: 100%"
+              size="mini"
+              clearable
+              filterable                                   
+              :data="siteList"
+              optionkey="displayText"
+              optionValue="value"
+            ></big-data-select>
+
             </el-form-item>
-          </el-col>
+          </el-col> -->
            <el-col :span="4">
             <el-form-item label="租金：" prop="sellingPrice" >
                 <el-input-number
@@ -152,9 +152,15 @@
           </el-col>
         <!-- </el-row>       
          <el-row> -->
-          <el-col :span="10">
-            <el-form-item label="有效时间：" prop="submitDateRange">
-              <el-date-picker
+          <el-col :span="4">
+            <el-form-item label="有效时间：" prop="effectiveSTime">
+               <el-date-picker
+                v-model="form.effectiveSTime"
+                type="date"
+                placeholder="有效时间起"
+                style="width: 100%">
+              </el-date-picker>
+              <!-- <el-date-picker
                 v-model="form.submitDateRange"
                 type="daterange"
                 align="right"                
@@ -165,7 +171,17 @@
                 :picker-options="pickerRangeOptions"
                 clearable
                 style="width: 100%"
-              ></el-date-picker>  
+              ></el-date-picker>   -->
+            </el-form-item>
+          </el-col>
+            <el-col :span="4">
+            <el-form-item label="有效时间止：" prop="effectiveETime">
+            <el-date-picker
+                v-model="form.effectiveETime"
+                type="date"
+                placeholder="有效时间止"
+                style="width: 100%">
+              </el-date-picker>
             </el-form-item>
           </el-col>
             <el-col :span="24" >
@@ -462,8 +478,9 @@
                 :multiple="true"
                 :show-file-list="true">
                 <el-button slot="trigger" size="small" type="primary">选取附件</el-button>
-                <el-button style="margin-left: 10px;" size="small" type="success" @click="submitUpload">上传附件</el-button>
-              </el-upload>
+                <!-- <el-button style="margin-left: 10px;" size="small" type="success" @click="submitUpload">上传附件</el-button>
+             -->
+              </el-upload> 
           
           </el-col>
            
@@ -539,7 +556,7 @@
     </el-form>
       <span slot="footer" class="dialog-footer">
         <el-button @click="windowShow = false" size="small">取 消</el-button>
-        <el-button type="primary" @click="save()" :loading="btnLoading" size="small">确认发布</el-button>
+        <el-button type="primary" @click="save()" :loading="formLoading" size="small">确认发布</el-button>
       </span>
     </el-dialog>
   </div>
@@ -553,7 +570,7 @@ import { pickerRangeOptions } from "consts/common";
 import { parseTime } from "utils";
 import upload from "components/upload/upload";
 import { GetUploaFile,GetUPFile,BathDeltefile } from "api/publicBase/Attachment";
-import { warnMsg } from "utils/messageBox";
+import { warnMsg ,successMsg} from "utils/messageBox";
 
 export default {
   components: {
@@ -581,7 +598,8 @@ export default {
           startStation: "", 
           endStation: [], 
           returnStation: "", 
-          // effectiveETime: "",
+          effectiveSTime: null,  
+          effectiveETime: null,
           hopePrice: 0,
           line: "",
           isEnable:true,
@@ -629,8 +647,8 @@ export default {
         startStation: "", 
         endStation:[],
         returnStation: "", 
-        // effectiveSTime: "", 
-        // effectiveETime: "",
+        effectiveSTime: null,  
+        effectiveETime: null,
         hopePrice: 0,
         line: "",
         isEnable:true,
@@ -667,9 +685,9 @@ export default {
       rules: {
         //billNO: [{ required: true, message: "请选择船公司" }],
         startStation: [{ required: true, message: "请选择起运地" ,trigger: "change"}],
-        //endStation: [{ required: true, message: "请选择目的站" ,trigger: "change"}],
+        endStation: [{ required: true, message: "请选择还箱地" ,trigger: "change"}],
          line: [{ required: true, message: "请选择航线" ,trigger: "change"}],
-        returnStation: [{ required: true, message: "请选择还箱地" ,trigger: "change"}],
+        //returnStation: [{ required: true, message: "请选择还箱地" ,trigger: "change"}],
         submitDateRange: [
         { required: true, message: '请选择有效时间'},
         {validator: this.validatetime},
@@ -679,6 +697,8 @@ export default {
         box: [{ required: true, message: "请选择箱型" ,trigger: "change"}],
         size: [{ required: true, message: "请选择尺寸" ,trigger: "change"}],
         quantity: [{ required: true, message: "请输入箱量", trigger: "blur" }],
+         effectiveSTime: [{ required: true, message: "请选择有效时间起" }],
+         effectiveETime: [{ required: true, message: "请选择有效时间止" }],
       //boxAge: [{ required: true, message: "请输入箱龄", trigger: "blur" }],
       }
 
@@ -771,11 +791,11 @@ export default {
           this.form = res.result.boxInfo;
           this.form.line = res.result.boxInfo.line.toString();
         
-         var submitDateRange=[];
-        
-        submitDateRange.push(res.result.boxInfo.effectiveSTime);
-        submitDateRange.push(res.result.boxInfo.effectiveETime);
-        this.$set(this.form, 'submitDateRange', submitDateRange);
+        //  var submitDateRange=[];        
+        // submitDateRange.push(res.result.boxInfo.effectiveSTime);
+        // submitDateRange.push(res.result.boxInfo.effectiveETime);
+        // this.$set(this.form, 'submitDateRange', submitDateRange);
+
         this.form.boxDetails=res.result.boxDetails;
          this.filelist=res.result.fileList;
            this.getlinesiteList(res.result.boxInfo.endStation);
@@ -817,22 +837,24 @@ export default {
           let msg = this.form.id
             ? "编辑箱东信息发布"
             : "新增箱东信息发布";
-          this.btnLoading = true;
+          //this.btnLoading = true;
           let data=this.form;
-           if (
-              this.form.submitDateRange != null &&
-              this.form.submitDateRange != undefined &&
-              this.form.submitDateRange.length > 0
-            ) {
-              data.EffectiveSTime = parseTime(this.form.submitDateRange[0]);
-              data.EffectiveETime = parseTime(this.form.submitDateRange[1]);
-            } else {
-              // data.settleTimebegin = null;
-              // data.settlenTimeend = null;
-              warnMsg("请选择有效时间");
-              return;
-            };
-            
+           data.effectiveSTime=parseTime( this.form.effectiveSTime);
+          data.effectiveETime=parseTime( this.form.effectiveETime);
+          //  if (
+          //     this.form.submitDateRange != null &&
+          //     this.form.submitDateRange != undefined &&
+          //     this.form.submitDateRange.length > 0
+          //   ) {
+          //     data.EffectiveSTime = parseTime(this.form.submitDateRange[0]);
+          //     data.EffectiveETime = parseTime(this.form.submitDateRange[1]);
+          //   } else {
+          //     // data.settleTimebegin = null;
+          //     // data.settlenTimeend = null;
+          //     warnMsg("请选择有效时间");
+          //     return;
+          //   };
+          this.formLoading = true;  
           XDDelInfoAddEdit(
             data,
             msg
@@ -840,19 +862,71 @@ export default {
             .then(res => {
               if(res.success)
               {
-                 this.btnLoading = false;
+                 //this.btnLoading = false;
               // this.windowShow = false;
               // this.$emit("on-save-success");
                 // if(!this.form.id){
                 //      this.form.id=res.result.id;
                 //      this.form.billNO=res.result.billNO;
                 // }
-               this.GetXDDelInfoSingle(res.result.id);
+               //this.GetXDDelInfoSingle(res.result.id);
+                 var files = this.$refs.upload.uploadFiles;
+                  var  upfilecount=files.length;            
+                  var  IsALLSuccess= true;
+                  if(upfilecount>0)
+                  {
+                    // this.formLoading = false; 
+                    //  this.$refs.upload.submit();     
+                    files.forEach((item,index) => {           
+                      let formData = new FormData();
+                        formData.append("files", item.raw);
+                        formData.append("type", "XD");
+                        formData.append("billno", res.result.billNO);
+                        formData.append("id",res.result.id);
+                        GetUploaFile(formData).then(res2 => {
+                          if (res2.success) {  
+                          // successMsg(this.upfilecount+'/'+this.upsuccess)
+                            if(upfilecount===(index+1))      
+                            { 
+                              if(IsALLSuccess)
+                              {
+                                successMsg('信息发布成功!');
+                              }
+                              else{
+                                warnMsg('信息发布成功,部分附件上传失败!');     
+                              }
+
+                              this.$refs.upload.clearFiles();
+                                //this.getfileList();
+                                this.formLoading = false;           
+                                this.GetXDDelInfoSingle(res.result.id); 
+                          
+                            }
+                          
+                          }
+                        })
+                        .catch(err=>{
+                          IsALLSuccess= false;
+                          if(upfilecount===(index+1)) {
+                            warnMsg('信息发布成功,部分附件上传失败!');                
+                            this.formLoading = false;           
+                            this.$refs.upload.clearFiles();
+                            this.GetXDDelInfoSingle(res.result.id);
+                          }
+                        
+                        })
+                    });            
+                  }
+                  else{
+                    this.formLoading = false;           
+                    this.GetXDDelInfoSingle(res.result.id);  
+                      successMsg('信息发布成功!');    
+                  }
               }
               
             })
             .catch(err => {
-              this.btnLoading = false;
+              this.formLoading = false;
             });
         }
       });

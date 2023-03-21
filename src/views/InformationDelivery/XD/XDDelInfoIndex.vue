@@ -65,7 +65,7 @@
           <el-form-item label="还箱地：" prop>
             <el-select
               v-model="search.ReturnStation"
-              placeholder="目的站"
+              placeholder="还箱地"
               style="width:99%"
             clearable
               filterable
@@ -199,19 +199,19 @@
          <el-table-column
           align="center"
           prop="endStation"
-          label="目的站"
+          label="还箱地"
           width="160px"
           sortable="custom"
           show-overflow-tooltip
         ></el-table-column>
-        <el-table-column
+        <!-- <el-table-column
           align="center"
           prop="returnStation"
           label="还箱地"
           width="120px"
           sortable="custom"
           show-overflow-tooltip
-        ></el-table-column>
+        ></el-table-column> -->
          <el-table-column
           align="center"
           prop="xxcc"
@@ -417,7 +417,7 @@ export default {
         line: "",
         EndStation: "",
         ReturnStation: "",
-        IsEnable: undefined,
+        IsEnable: true,
         IsVerify: undefined,
         Finish: undefined,
         IsInStock: undefined,

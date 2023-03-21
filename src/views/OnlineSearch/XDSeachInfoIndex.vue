@@ -6,12 +6,12 @@
           <table class="querytable">
              <tr>
                 <td class="tdtitle" style="width:180px">单号</td>
-                <td class="tdtitle" style="width:150px">起运站</td>
-                <td class="tdtitle" style="width:150px">目的站</td>
+                <td class="tdtitle" style="width:180px">提箱地</td>
+                <td class="tdtitle" style="width:180px">还箱地</td>
                  <td class="tdtitle" style="width:150px">箱型箱量</td>
                 <!-- <td class="tdtitle" style="width:150px">还箱地</td> -->
                 <!-- <td class="tdtitle" style="width:150px">是否库存</td> -->
-                <td class="tdtitle" style="width:360px">用箱时间</td>
+                <td class="tdtitle" colspan="2">用箱时间</td>
                 <td class="tdtitle" style="width:100px"></td>
               </tr>
               <tr>
@@ -22,23 +22,9 @@
                     </el-input>
                   </td>
                   <td> 
-                    <!-- <el-select
-                      v-model="search.StartStation"
-                      placeholder="起运站"
-                      style="width:95%"
-                      clearable
-                      filterable
-                    >
-                      <el-option
-                        v-for="item in siteList"
-                        :key="item.value"
-                        :label="item.displayText"
-                        :value="item.value"
-                      ></el-option>
-                    </el-select> -->
                     <big-data-select             
                       :val.sync="search.StartStation"
-                      placeholder="起运站"
+                      placeholder="提箱地"
                       style="width: 95%"
                       size="mini"
                       clearable
@@ -51,7 +37,7 @@
                   <td> 
                      <!-- <el-select
                       v-model="search.EndStation"
-                      placeholder="目的站"
+                      placeholder="还箱地"
                       style="width:95%"
                     clearable
                       filterable
@@ -65,7 +51,7 @@
                     </el-select> -->
                       <big-data-select             
                       :val.sync="search.EndStation"
-                      placeholder="目的站"
+                      placeholder="还箱地"
                       style="width: 95%"
                       size="mini"
                       clearable
@@ -154,14 +140,28 @@
                       placeholder="选择日期"
                        style="width:95%">
                     </el-date-picker> -->
-                     <el-date-picker
+                     <!-- <el-date-picker
                         v-model="search.EffectiveTime"
                         type="daterange"
                         range-separator="至"
                         start-placeholder="开始日期"
                         end-placeholder="结束日期"
                           style="width: 100%">
-                      </el-date-picker>
+                      </el-date-picker> -->
+                        <el-date-picker
+                          v-model="search.EffectiveSTime"
+                          type="date"
+                          placeholder="用箱时间起"
+                          style="width:150px">
+                        </el-date-picker>
+                         </td>
+                  <td>
+                         <el-date-picker
+                          v-model="search.EffectiveETime"
+                          type="date"
+                          placeholder="用箱时间止"
+                          style="width:150px">
+                        </el-date-picker>
                   </td>
                   <td>
                      <el-button type="primary" size="mini" class="btnset"
@@ -218,7 +218,7 @@
             :row-key="getRowKeys"
             @selection-change="onSelectChange"         
             
-            highlight-current-row=
+            highlight-current-row
             fit
             height="100%"
             style="width: 100%,height:100%"
@@ -257,7 +257,7 @@
             <el-table-column
               align="center"
               prop="startStation"
-              label="起运站/目的站/还箱地"
+              label="提箱地/还箱地"
               width="360px"
               sortable="custom"
               
@@ -265,14 +265,13 @@
              <template slot-scope="scope">
                 <span>{{
                   scope.row.startStation+"  —("+scope.row.line+"路线至)——>"+scope.row.endStation
-                  +" ——(还箱至)——>"+scope.row.returnStation
                   }}</span>
               </template>
             </el-table-column>
             <!-- <el-table-column
               align="center"
               prop="endStation"
-              label="目的站"
+              label="还箱地"
               width="120px"
               sortable="custom"
               show-overflow-tooltip
@@ -404,7 +403,8 @@ export default {
         ReturnStation: "",    
         Finish: undefined,
         XXCC:"",
-        EffectiveTime:[]
+        EffectiveSTime:null,
+        EffectiveETime:null,
       },
       Finish:[true,false],
       siteList: [], //站点
@@ -496,18 +496,42 @@ export default {
       this.tableData = [];
       let data=this.search;    
       
-        if (
-              this.search.EffectiveTime != null &&
-              this.search.EffectiveTime != undefined &&
-              this.search.EffectiveTime.length > 0
-            ) {
-              data.EffectiveSTime = parseTime(this.search.EffectiveTime[0]);
-              data.EffectiveETime = parseTime(this.search.EffectiveTime[1]);
-            } else {
-               data.EffectiveSTime = null;
-               data.EffectiveETime = null;
+        // if (
+        //       this.search.EffectiveTime != null &&
+        //       this.search.EffectiveTime != undefined &&
+        //       this.search.EffectiveTime.length > 0
+        //     ) {
+        //       data.EffectiveSTime = parseTime(this.search.EffectiveTime[0]);
+        //       data.EffectiveETime = parseTime(this.search.EffectiveTime[1]);
+        //     } else {
+        //        data.EffectiveSTime = null;
+        //        data.EffectiveETime = null;
              
+        //     };
+
+        if (
+              this.search.EffectiveSTime != null &&
+              this.search.EffectiveSTime != undefined &&
+               this.search.EffectiveSTime != ""
+            ) {
+              data.EffectiveSTime = parseTime(this.search.EffectiveSTime);
+            
+            } else {
+               data.EffectiveSTime = null;                        
             };
+        if (
+              this.search.EffectiveETime != null &&
+              this.search.EffectiveETime != undefined &&
+               this.search.EffectiveETime != ""
+            ) {
+              data.EffectiveETime = parseTime(this.search.EffectiveETime);
+            
+            } else {
+               data.EffectiveETime = null;                        
+            };
+
+
+
 
       data.maxResultCount= this.page.pageSize;
       data.skipCount= (this.page.currentPage - 1) * this.page.pageSize;
@@ -562,7 +586,9 @@ export default {
        
          this.search.StartStation=this.$route.query.StartStation; 
          this.search.EndStation=this.$route.query.EndStation;  
-         this.search.EffectiveTime=this.$route.query.EffectiveTime;  
+         //this.search.EffectiveTime=this.$route.query.EffectiveTime;  
+         this.search.EffectiveSTime=this.$route.query.EffectiveSTime;
+         this.search.EffectiveETime=this.$route.query.EffectiveETime;
          this.search.XXCC=this.$route.query.XXCC;
         this.getxxcclist();
         this.getTableList();       

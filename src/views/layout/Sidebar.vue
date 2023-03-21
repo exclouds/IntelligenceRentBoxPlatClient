@@ -29,35 +29,35 @@
         class="menuclass"
         
       > 
-        <el-menu-item index="1">
+        <el-menu-item index="0">
          <router-link  to="/dashboard">首页</router-link> 
          </el-menu-item>
-         <el-menu-item index="2">
+         <el-menu-item index="1">
             <router-link v-if="type==='1' ||type==='3' "   to="/XDDelInfo/XDDelInfo">信息发布</router-link> 
            <router-link v-else to="/ZKDelInfo/ZKDelInfo">信息发布</router-link>
            </el-menu-item>      
-         <!-- <el-menu-item index="21">
+         <!-- <el-menu-item index="1">
             <router-link   to="/XDDelInfo/XDDelInfo">箱东信息发布</router-link> 
           </el-menu-item>  
 
-           <el-menu-item index="22">
+           <el-menu-item index="2">
            <router-link  to="/ZKDelInfo/ZKDelInfo">租客信息发布</router-link>
            </el-menu-item>   -->
 
-         <el-menu-item index="3"> 
+         <el-menu-item index="2"> 
            <router-link v-if="type==='1' ||type==='3' " to="/ZKSeachInfo/ZKSeachInfo">在线查询</router-link>
           <router-link v-else to="/XDSeachInfo/XDSeachInfo">在线查询</router-link> 
            </el-menu-item>
 
-           <!-- <el-menu-item index="31"> 
+           <!-- <el-menu-item index="3"> 
            <router-link  to="/ZKSeachInfo/ZKSeachInfo">租客在线查询</router-link>
          
            </el-menu-item>
-           <el-menu-item index="32">         
+           <el-menu-item index="4">         
                <router-link  to="/XDSeachInfo/XDSeachInfo">箱东在线查询</router-link> 
            </el-menu-item> -->
         
-         <el-menu-item index="4">
+         <el-menu-item index="3">
          <router-link  to="/InRecommond/InteRecommend">智能查询</router-link> 
            </el-menu-item>
          
