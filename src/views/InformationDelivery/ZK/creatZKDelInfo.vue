@@ -1,7 +1,7 @@
 <template>
   <div class="addzkset">
     <el-dialog
-      :title="form.id==''?'新增租客信息发布':'编辑租客信息发布'"
+      :title="form.id==''?'租客发布新信息':'租客编辑信息发布'"
       v-dialogDrag
       :visible.sync="windowShow"
       width="1800px"
@@ -461,8 +461,8 @@
                 :show-file-list="true"
                 >
                 <el-button slot="trigger" size="small" style="width:100px;padding:8px" type="primary">选取附件</el-button>
-                <!-- <el-button style="margin-left: 10px;" size="small" type="success" @click="submitUpload">上传附件</el-button>
-             -->
+                <el-button style="margin-left: 10px;" size="small" type="success" @click="submitUpload">上传附件</el-button>
+            
               </el-upload> 
           
           </el-col>
@@ -815,58 +815,62 @@ export default {
             .then(res => {
               // this.form.id=res.result.id;
               // this.form.billNO=res.result.billNO;
-              var files = this.$refs.upload.uploadFiles;
-              var  upfilecount=files.length;            
-              var  IsALLSuccess= true;
-              if(upfilecount>0)
-              {
-                // this.formLoading = false; 
-                //  this.$refs.upload.submit();     
-                files.forEach((item,index) => {           
-                  let formData = new FormData();
-                    formData.append("files", item.raw);
-                    formData.append("type", "ZK");
-                    formData.append("billno", res.result.billNO);
-                    formData.append("id",res.result.id);
-                    GetUploaFile(formData).then(res2 => {
-                      if (res2.success) {  
-                       // successMsg(this.upfilecount+'/'+this.upsuccess)
-                        if(upfilecount===(index+1))      
-                        { 
-                          if(IsALLSuccess)
-                          {
-                            successMsg('信息发布成功!');
-                          }
-                          else{
-                            warnMsg('信息发布成功,部分附件上传失败!');     
-                          }
-
-                          this.$refs.upload.clearFiles();
-                            //this.getfileList();
-                            this.formLoading = false;           
-                            this.GetZKDelInfoSingle(res.result.id); 
-                      
-                        }
-                      
-                      }
-                    })
-                    .catch(err=>{
-                      IsALLSuccess= false;
-                      if(upfilecount===(index+1)) {
-                        warnMsg('信息发布成功,部分附件上传失败!');                
-                        this.formLoading = false;           
-                        this.$refs.upload.clearFiles();
-                        this.GetZKDelInfoSingle(res.result.id);
-                      }
-                    
-                    })
-                });            
-              }
-              else{
                  this.formLoading = false;           
                  this.GetZKDelInfoSingle(res.result.id);  
-                  successMsg('信息发布成功!');    
-              }
+                  successMsg('信息发布成功!');
+              
+              // var files = this.$refs.upload.uploadFiles;
+              // var  upfilecount=files.length;            
+              // var  IsALLSuccess= true;
+              // if(upfilecount>0)
+              // {
+              //   // this.formLoading = false; 
+              //   //  this.$refs.upload.submit();     
+              //   files.forEach((item,index) => {           
+              //     let formData = new FormData();
+              //       formData.append("files", item.raw);
+              //       formData.append("type", "ZK");
+              //       formData.append("billno", res.result.billNO);
+              //       formData.append("id",res.result.id);
+              //       GetUploaFile(formData).then(res2 => {
+              //         if (res2.success) {  
+              //          // successMsg(this.upfilecount+'/'+this.upsuccess)
+              //           if(upfilecount===(index+1))      
+              //           { 
+              //             if(IsALLSuccess)
+              //             {
+              //               successMsg('信息发布成功!');
+              //             }
+              //             else{
+              //               warnMsg('信息发布成功,部分附件上传失败!');     
+              //             }
+
+              //             this.$refs.upload.clearFiles();
+              //               //this.getfileList();
+              //               this.formLoading = false;           
+              //               this.GetZKDelInfoSingle(res.result.id); 
+                      
+              //           }
+                      
+              //         }
+              //       })
+              //       .catch(err=>{
+              //         IsALLSuccess= false;
+              //         if(upfilecount===(index+1)) {
+              //           warnMsg('信息发布成功,部分附件上传失败!');                
+              //           this.formLoading = false;           
+              //           this.$refs.upload.clearFiles();
+              //           this.GetZKDelInfoSingle(res.result.id);
+              //         }
+                    
+              //       })
+              //   });            
+              // }
+              // else{
+              //    this.formLoading = false;           
+              //    this.GetZKDelInfoSingle(res.result.id);  
+              //     successMsg('信息发布成功!');    
+              // }
               
                 
             })

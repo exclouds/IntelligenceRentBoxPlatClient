@@ -1,7 +1,7 @@
 <template>
   <div class="addxdset" v-loading="formLoading">
     <el-dialog
-      :title="form.id==''?'新增箱东信息发布':'编辑箱东信息发布'"
+      :title="form.id==''?'箱东发布新信息':'箱东编辑发布信息'"
       v-dialogDrag
       :visible.sync="windowShow"
       width="1800px"
@@ -870,58 +870,62 @@ export default {
                 //      this.form.billNO=res.result.billNO;
                 // }
                //this.GetXDDelInfoSingle(res.result.id);
-                 var files = this.$refs.upload.uploadFiles;
-                  var  upfilecount=files.length;            
-                  var  IsALLSuccess= true;
-                  if(upfilecount>0)
-                  {
-                    // this.formLoading = false; 
-                    //  this.$refs.upload.submit();     
-                    files.forEach((item,index) => {           
-                      let formData = new FormData();
-                        formData.append("files", item.raw);
-                        formData.append("type", "XD");
-                        formData.append("billno", res.result.billNO);
-                        formData.append("id",res.result.id);
-                        GetUploaFile(formData).then(res2 => {
-                          if (res2.success) {  
-                          // successMsg(this.upfilecount+'/'+this.upsuccess)
-                            if(upfilecount===(index+1))      
-                            { 
-                              if(IsALLSuccess)
-                              {
-                                successMsg('信息发布成功!');
-                              }
-                              else{
-                                warnMsg('信息发布成功,部分附件上传失败!');     
-                              }
-
-                              this.$refs.upload.clearFiles();
-                                //this.getfileList();
-                                this.formLoading = false;           
-                                this.GetXDDelInfoSingle(res.result.id); 
-                          
-                            }
-                          
-                          }
-                        })
-                        .catch(err=>{
-                          IsALLSuccess= false;
-                          if(upfilecount===(index+1)) {
-                            warnMsg('信息发布成功,部分附件上传失败!');                
-                            this.formLoading = false;           
-                            this.$refs.upload.clearFiles();
-                            this.GetXDDelInfoSingle(res.result.id);
-                          }
-                        
-                        })
-                    });            
-                  }
-                  else{
-                    this.formLoading = false;           
+                 this.formLoading = false;           
                     this.GetXDDelInfoSingle(res.result.id);  
-                      successMsg('信息发布成功!');    
-                  }
+                      successMsg('信息发布成功!');   
+                
+                //  var files = this.$refs.upload.uploadFiles;
+                //   var  upfilecount=files.length;            
+                //   var  IsALLSuccess= true;
+                //   if(upfilecount>0)
+                //   {
+                //     // this.formLoading = false; 
+                //     //  this.$refs.upload.submit();     
+                //     files.forEach((item,index) => {           
+                //       let formData = new FormData();
+                //         formData.append("files", item.raw);
+                //         formData.append("type", "XD");
+                //         formData.append("billno", res.result.billNO);
+                //         formData.append("id",res.result.id);
+                //         GetUploaFile(formData).then(res2 => {
+                //           if (res2.success) {  
+                //           // successMsg(this.upfilecount+'/'+this.upsuccess)
+                //             if(upfilecount===(index+1))      
+                //             { 
+                //               if(IsALLSuccess)
+                //               {
+                //                 successMsg('信息发布成功!');
+                //               }
+                //               else{
+                //                 warnMsg('信息发布成功,部分附件上传失败!');     
+                //               }
+
+                //               this.$refs.upload.clearFiles();
+                //                 //this.getfileList();
+                //                 this.formLoading = false;           
+                //                 this.GetXDDelInfoSingle(res.result.id); 
+                          
+                //             }
+                          
+                //           }
+                //         })
+                //         .catch(err=>{
+                //           IsALLSuccess= false;
+                //           if(upfilecount===(index+1)) {
+                //             warnMsg('信息发布成功,部分附件上传失败!');                
+                //             this.formLoading = false;           
+                //             this.$refs.upload.clearFiles();
+                //             this.GetXDDelInfoSingle(res.result.id);
+                //           }
+                        
+                //         })
+                //     });            
+                //   }
+                //   else{
+                //     this.formLoading = false;           
+                //     this.GetXDDelInfoSingle(res.result.id);  
+                //       successMsg('信息发布成功!');    
+                //   }
               }
               
             })

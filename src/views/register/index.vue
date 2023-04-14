@@ -29,8 +29,8 @@
                               <el-input size="mini" style="width:70%" v-model="registerForm.userName" placeholder="请输入用户名"></el-input>
                             </el-form-item>
                              <el-form-item label="角色：" prop="CompanyType">
-                            <el-radio v-model="registerForm.CompanyType" :label="0" >箱东</el-radio>
-                            <el-radio v-model="registerForm.CompanyType" :label="1"> 租客</el-radio>
+                            <el-radio v-model="registerForm.CompanyType" :label="0" >租客</el-radio>
+                            <el-radio v-model="registerForm.CompanyType" :label="1">箱东</el-radio>
                             </el-form-item>                                                 
                             <el-form-item label="电话：" style="position:relative" prop="PhoneNumber">
                               <el-input size="mini" style="width:70%" v-model="registerForm.PhoneNumber" placeholder="请输入电话"></el-input>
@@ -74,8 +74,8 @@
                               <el-input size="mini" style="width:70%" v-model="registerGrForm.userName" placeholder="请输入用户名"></el-input>
                             </el-form-item>
                              <el-form-item label="角色：" prop="CompanyType">
-                            <el-radio v-model="registerGrForm.CompanyType" :label="0" >箱东</el-radio>
-                            <el-radio v-model="registerGrForm.CompanyType" :label="1"> 租客</el-radio>
+                            <el-radio v-model="registerGrForm.CompanyType" :label="0" >租客</el-radio>
+                            <el-radio v-model="registerGrForm.CompanyType" :label="1">箱东 </el-radio>
                             </el-form-item>  
                             <el-form-item label="性别：" prop="sex">
                             <el-radio v-model="registerGrForm.sex" :label="0" ><icon name="男" scale="1.5"/></el-radio>
