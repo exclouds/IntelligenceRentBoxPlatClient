@@ -463,7 +463,7 @@ export default {
     background:rgba(247,247,247,0.9);
     border-width: 0px;
    
-    width: 1100px;
+    width: 100%;
     height: 168px;
      .el-input__inner{
        height: 40px;
