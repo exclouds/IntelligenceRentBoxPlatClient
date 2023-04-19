@@ -11,10 +11,10 @@
           </el-form-item>
         </el-col>
         <el-col :span="4">
-          <el-form-item label="起运站：" prop>
+          <el-form-item label="提箱地：" prop>
             <big-data-select             
               :val.sync="search.StartStation"
-              placeholder="起运站"
+              placeholder="提箱地"
               style="width: 100%"
               size="mini"
               clearable
@@ -182,7 +182,7 @@
         <el-table-column
           align="center"
           prop="startStation"
-          label="起运站"
+          label="提箱地"
            width="120px"
           sortable="custom"
           show-overflow-tooltip

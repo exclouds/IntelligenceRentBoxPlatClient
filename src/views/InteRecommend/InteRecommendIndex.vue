@@ -25,7 +25,7 @@
                   </div>
         
             <div>单号：{{item.billNO}}    </div>
-            <div>{{"起运港："+item.startStation}}    </div>
+            <div>{{"还箱地："+item.endStation}}    </div>
             <div>航线：{{item.line}}</div>
             <div >集装箱信息：{{item.xxcc}}</div>       
           <div>有效时间：{{item.effectiveSTime+" 至  "+item.effectiveETime}}</div>

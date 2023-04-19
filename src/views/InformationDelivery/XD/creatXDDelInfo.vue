@@ -30,10 +30,10 @@
             </el-form-item>
           </el-col>
           <el-col :span="4">
-            <el-form-item label="起运站：" prop="startStation">
+            <el-form-item label="提箱地：" prop="startStation">
              <big-data-select             
               :val.sync="form.startStation"
-              placeholder="起运站"
+              placeholder="提箱地"
                style="width:99%"
               size="mini"
               clearable
