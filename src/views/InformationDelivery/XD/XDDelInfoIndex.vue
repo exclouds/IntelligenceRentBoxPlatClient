@@ -485,7 +485,10 @@ export default {
        
         this.$refs.creatXDDelInfoComp.GetXDDelInfoSingle(id);
               
-      } 
+      } else{
+        this.$refs.creatXDDelInfoComp.form.line=="8";
+        this.$refs.creatXDDelInfoComp.getlinesiteList("");
+      }
     },
     onCreatCtnTypeContrastCompShowChange(val) {
       this.creatXDDelInfoComp.show = val;

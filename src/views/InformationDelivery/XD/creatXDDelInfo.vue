@@ -601,7 +601,7 @@ export default {
           effectiveSTime: null,  
           effectiveETime: null,
           hopePrice: 0,
-          line: "",
+          line: "8",
           isEnable:true,
          // isInStock:true,
           remarks: "", //备注
@@ -650,7 +650,7 @@ export default {
         effectiveSTime: null,  
         effectiveETime: null,
         hopePrice: 0,
-        line: "",
+        line: "8",
         isEnable:true,
        // isInStock:true,
         remarks: "", //备注

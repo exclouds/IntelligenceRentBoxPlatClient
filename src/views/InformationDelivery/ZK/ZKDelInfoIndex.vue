@@ -430,6 +430,10 @@ export default {
       if (id) {       
         this.$refs.creatZKDelInfoComp.GetZKDelInfoSingle(id);             
       } 
+      else{
+        this.$refs.creatZKDelInfoComp.form.line="8";
+        this.$refs.creatZKDelInfoComp.getlinesiteList("");
+      }
     },
     onCreatCtnTypeContrastCompShowChange(val) {
       this.creatZKDelInfoComp.show = val;
