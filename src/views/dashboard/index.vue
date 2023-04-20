@@ -11,9 +11,9 @@
      <el-card id="querycard" >
        <table class="querytable">
              <tr>
-              <td class="tdtitle">起运站</td>
+              <td class="tdtitle">提箱地</td>
               <!-- <td class="tdtitle">航线</td> -->
-               <td class="tdtitle">目的站</td>
+               <td class="tdtitle">还箱地</td>
               <td class="tdtitle">箱型箱量</td>             
                <!-- <td class="tdtitle">箱量</td> -->
                <td class="tdtitle">用箱时间</td>
@@ -24,7 +24,7 @@
                 <td>
                  <big-data-select             
                       :val.sync="search.StartStation"
-                      placeholder="起运站"
+                      placeholder="提箱地"
                       style="width: 95%"
                       size="mini"
                       clearable
@@ -37,7 +37,7 @@
                 <td>
                    <big-data-select             
                       :val.sync="search.EndStation"
-                      placeholder="目的站"
+                      placeholder="还箱地"
                       style="width: 95%"
                       size="mini"
                       clearable
