@@ -87,7 +87,7 @@
     </el-col>
       <el-col :span="1"  align="center" >
         <!-- <el-tooltip content="客服电话：8888888" placement="top" effect="light">          -->
-        <a href="http://47.103.117.243:1922/#/imclient" target="_blank">  
+        <a href="http://47.103.117.243:1922/consumer" target="_blank">  
         <img id="u0_img"  class="img" 
            src="../../assets/images/u87.png" />
         </a>
